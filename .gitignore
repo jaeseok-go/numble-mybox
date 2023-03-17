@@ -1,5 +1,6 @@
 # Properties files
-application*.yml
+application.yml
+application-prd.yml
 
 ### Intellij ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider

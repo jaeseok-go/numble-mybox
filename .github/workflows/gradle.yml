@@ -31,4 +31,4 @@ jobs:
  
       # Gradle test를 실행한다
       - name: Test with Gradle
-        run: ./gradlew --info test
+        run: ./gradlew clean test --info -Dspring.profiles.active=dev
