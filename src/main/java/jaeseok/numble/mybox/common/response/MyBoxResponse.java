@@ -3,16 +3,10 @@ package jaeseok.numble.mybox.common.response;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 
 public class MyBoxResponse {
-    private static final String SUCCESS_CODE = ErrorCode.SUCCESS.getCode();
+    private static final String SUCCESS_CODE = ResponseCode.SUCCESS.getCode();
     private Boolean success;
     private String errorCode;
     private Object data;
-
-    public MyBoxResponse(Boolean success, String errorCode, Object data) {
-        this.success = success;
-        this.errorCode = errorCode;
-        this.data = data;
-    }
 
     public MyBoxResponse(Object data) {
         this.success = true;
