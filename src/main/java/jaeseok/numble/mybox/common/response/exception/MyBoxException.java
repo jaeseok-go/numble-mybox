@@ -1,14 +1,14 @@
 package jaeseok.numble.mybox.common.response.exception;
 
-import jaeseok.numble.mybox.common.response.ErrorCode;
+import jaeseok.numble.mybox.common.response.ResponseCode;
 
 public class MyBoxException extends RuntimeException {
 
     private String errorCode;
 
-    public MyBoxException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-        this.errorCode = errorCode.getCode();
+    public MyBoxException(ResponseCode responseCode) {
+        super(responseCode.getMessage());
+        this.errorCode = responseCode.getCode();
     }
 
     public String getErrorCode() {
