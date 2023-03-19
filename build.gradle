@@ -32,6 +32,10 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+jar {
+    enabled = false
+}
+
 test {
     systemProperty "spring.profiles.active", System.properties['spring.profiles.active']
 }
