@@ -1,6 +1,6 @@
 package jaeseok.numble.mybox.file.domain;
 
-import jaeseok.numble.mybox.folder.domain.Parent;
+import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.member.domain.Member;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -22,14 +22,20 @@ public class File {
     @ColumnDefault("0")
     private Long size;
 
+    @Column(name = "path", nullable = true)
+    private String path;
+
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
+    @Column(name = "modified_at", nullable = true)
+    private LocalDateTime modifiedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private Member owner;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", nullable = true)
-    private Parent parent;
+    private Folder parent;
 }
