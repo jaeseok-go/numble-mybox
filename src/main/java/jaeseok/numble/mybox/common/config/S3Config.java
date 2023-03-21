@@ -9,7 +9,9 @@ import jaeseok.numble.mybox.storage.StorageHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
+@Profile("prd")
 @Configuration
 public class S3Config {
     @Value("${cloud.aws.credentials.access-key}")
