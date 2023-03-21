@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ResponseCode {
-    SUCCESS("00000", "there is no exception");
+    SUCCESS("00000", "There is no exception."),
+    FILE_UPLOAD_FAIL("F0001", "Fail to upload file.");
 
     private final String code;
     private final String message;
