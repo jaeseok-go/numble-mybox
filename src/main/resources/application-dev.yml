@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   application:
     name: mybox
@@ -19,3 +20,12 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: create
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+
+logging:
+  level:
+    com.amazonaws.util.EC2MetadataUtils: error
