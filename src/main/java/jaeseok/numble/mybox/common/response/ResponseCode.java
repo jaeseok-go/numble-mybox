@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ResponseCode {
     SUCCESS("00000", "There is no exception."),
+
+    INVALID_TOKEN("A0001", "Token is expired."),
     FILE_UPLOAD_FAIL("F0001", "Fail to upload file.");
 
     private final String code;
