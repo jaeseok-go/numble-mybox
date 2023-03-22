@@ -31,3 +31,7 @@ cloud:
 logging:
   level:
     com.amazonaws.util.EC2MetadataUtils: error
+
+jwt-token:
+  issue-key: gvklc9fFEKzt6o0t5QJy1GFxUyhe8NsUvCMZzmUiBSTCDIjq6SrDI22YM7iN4kfJ
+  valid-time: 600000 # 10분
