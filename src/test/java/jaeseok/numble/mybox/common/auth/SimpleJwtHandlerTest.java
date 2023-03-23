@@ -1,5 +1,6 @@
 package jaeseok.numble.mybox.common.auth;
 
+import io.jsonwebtoken.MalformedJwtException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -55,7 +56,7 @@ class SimpleJwtHandlerTest {
     }
 
     @Test
-    @DisplayName("JWT validate : 성공")
+    @DisplayName("Jwt validate : 성공")
     void testValidateSuccess() {
         // given
         String id = "test_id";
@@ -65,5 +66,18 @@ class SimpleJwtHandlerTest {
 
         // then
         Assertions.assertTrue(jwtHandler.validate(jwt));
+    }
+
+    @Test
+    @DisplayName("Jwt validate : 실패")
+    void testValidateFail() {
+        // given
+        String jwt = "trash_value";
+
+        // when
+        Boolean validate = jwtHandler.validate(jwt);
+
+        // then
+        Assertions.assertFalse(validate);
     }
 }

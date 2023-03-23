@@ -3,12 +3,14 @@ package jaeseok.numble.mybox.common.auth;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
+@Component
 public class SimpleJwtHandler implements JwtHandler{
 
     @Value("${jwt-token.issue-key}")
@@ -42,6 +44,10 @@ public class SimpleJwtHandler implements JwtHandler{
 
     @Override
     public Boolean validate(String jwt) {
-        return !getId(jwt).isBlank();
+        try {
+            return !getId(jwt).isBlank();
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
