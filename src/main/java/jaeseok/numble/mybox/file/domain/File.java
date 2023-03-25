@@ -2,11 +2,19 @@ package jaeseok.numble.mybox.file.domain;
 
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.member.domain.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Builder
 @Entity
 @Table(name = "file")
 public class File {
@@ -22,8 +30,9 @@ public class File {
     @ColumnDefault("0")
     private Long size;
 
-    @Column(name = "path", nullable = true)
-    private String path;
+    @Column(name = "parent_path", nullable = false, columnDefinition = "VARCHAR(2000) DEFAULT '/'")
+    @ColumnDefault("/")
+    private String parentPath;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;

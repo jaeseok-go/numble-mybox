@@ -5,5 +5,7 @@ public interface JwtHandler {
 
     String getId(String jwt);
 
+    String getId();
+
     Boolean validate(String jwt);
 }
