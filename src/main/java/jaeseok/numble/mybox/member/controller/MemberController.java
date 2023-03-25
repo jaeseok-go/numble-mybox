@@ -6,10 +6,7 @@ import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import jaeseok.numble.mybox.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -26,6 +23,12 @@ public class MemberController {
     @PostMapping("/v1/login")
     public ResponseEntity login(@RequestBody LoginDto loginDto) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(memberService.login(loginDto));
+        return ResponseEntity.ok(myBoxResponse);
+    }
+
+    @GetMapping("/v1/member/{id}")
+    public ResponseEntity retrieveMember(@PathVariable String id) {
+        MyBoxResponse myBoxResponse = new MyBoxResponse((memberService.retrieveMember(id)));
         return ResponseEntity.ok(myBoxResponse);
     }
 }

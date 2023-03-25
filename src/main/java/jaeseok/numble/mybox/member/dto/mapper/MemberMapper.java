@@ -2,6 +2,7 @@ package jaeseok.numble.mybox.member.dto.mapper;
 
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
+import jaeseok.numble.mybox.member.dto.UsageDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -14,4 +15,5 @@ public interface MemberMapper {
     MemberMapper INSTANCE = Mappers.getMapper(MemberMapper.class);
     @Mapping(target = "createdAt", expression = "java( LocalDateTime.now() )")
     Member toMember(MemberSignUpDto memberSignUpDto);
+
 }
