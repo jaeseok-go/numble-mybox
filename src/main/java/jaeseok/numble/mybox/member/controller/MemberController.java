@@ -1,6 +1,7 @@
 package jaeseok.numble.mybox.member.controller;
 
 import jaeseok.numble.mybox.common.response.MyBoxResponse;
+import jaeseok.numble.mybox.member.dto.LoginDto;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import jaeseok.numble.mybox.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,12 @@ public class MemberController {
     @PostMapping("/v1/members")
     public ResponseEntity signUp(@RequestBody MemberSignUpDto memberSignUpDto) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(memberService.signUp(memberSignUpDto));
+        return ResponseEntity.ok(myBoxResponse);
+    }
+
+    @PostMapping("/v1/login")
+    public ResponseEntity login(@RequestBody LoginDto loginDto) {
+        MyBoxResponse myBoxResponse = new MyBoxResponse(memberService.login(loginDto));
         return ResponseEntity.ok(myBoxResponse);
     }
 }
