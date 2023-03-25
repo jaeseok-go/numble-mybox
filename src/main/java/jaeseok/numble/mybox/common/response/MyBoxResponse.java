@@ -21,4 +21,8 @@ public class MyBoxResponse {
         this.errorCode = errorCode;
         this.data = exception.getMessage();
     }
+
+    public boolean isSuccess() {
+        return this.success;
+    }
 }
