@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @SpringBootTest
 class SimpleJwtHandlerTest {
 
@@ -55,7 +57,7 @@ class SimpleJwtHandlerTest {
     }
 
     @Test
-    @DisplayName("JWT validate : 성공")
+    @DisplayName("Jwt validate : 성공")
     void testValidateSuccess() {
         // given
         String id = "test_id";
@@ -65,5 +67,18 @@ class SimpleJwtHandlerTest {
 
         // then
         Assertions.assertTrue(jwtHandler.validate(jwt));
+    }
+
+    @Test
+    @DisplayName("Jwt validate : 실패")
+    void testValidateFail() {
+        // given
+        String jwt = "trash_value";
+
+        // when
+        Boolean validate = jwtHandler.validate(jwt);
+
+        // then
+        Assertions.assertFalse(validate);
     }
 }
