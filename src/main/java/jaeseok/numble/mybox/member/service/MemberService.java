@@ -8,7 +8,7 @@ import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.LoginDto;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import jaeseok.numble.mybox.member.dto.UsageDto;
-import jaeseok.numble.mybox.member.dto.mapper.MemberInfoDto;
+import jaeseok.numble.mybox.member.dto.MemberInfoDto;
 import jaeseok.numble.mybox.member.dto.mapper.MemberMapper;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
 import jaeseok.numble.mybox.common.util.ByteConvertor;

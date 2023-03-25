@@ -1,4 +1,4 @@
-package jaeseok.numble.mybox.member.dto.mapper;
+package jaeseok.numble.mybox.member.dto;
 
 import jaeseok.numble.mybox.member.dto.UsageDto;
 import lombok.*;
