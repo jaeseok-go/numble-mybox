@@ -1,12 +1,16 @@
 package jaeseok.numble.mybox.member.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name="member")
 public class Member {
     @Id
@@ -19,6 +23,11 @@ public class Member {
     @Column(name = "nickname", nullable = false, length = 30)
     private String nickname;
 
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at",nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
+
+    @Override
+    public boolean equals(Object object) {
+        return object instanceof Member && this.id.equals(((Member) object).id);
+    }
 }
