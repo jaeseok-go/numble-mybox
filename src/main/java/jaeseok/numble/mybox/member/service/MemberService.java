@@ -34,7 +34,9 @@ public class MemberService {
         return jwtHandler.create(loginDto.getId());
     }
 
-    public MemberInfoDto retrieveMember(String id) {
+    public MemberInfoDto retrieveMember() {
+        String id = jwtHandler.getId();
+        
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 

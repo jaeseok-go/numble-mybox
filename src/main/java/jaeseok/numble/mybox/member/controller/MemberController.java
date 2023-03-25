@@ -26,9 +26,9 @@ public class MemberController {
         return ResponseEntity.ok(myBoxResponse);
     }
 
-    @GetMapping("/v1/member/{id}")
-    public ResponseEntity retrieveMember(@PathVariable String id) {
-        MyBoxResponse myBoxResponse = new MyBoxResponse((memberService.retrieveMember(id)));
+    @GetMapping("/v1/member")
+    public ResponseEntity retrieveMember() {
+        MyBoxResponse myBoxResponse = new MyBoxResponse((memberService.retrieveMember()));
         return ResponseEntity.ok(myBoxResponse);
     }
 }
