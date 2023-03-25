@@ -1,4 +1,4 @@
-package jaeseok.numble.mybox.util;
+package jaeseok.numble.mybox.common.util;
 
 public class ByteConvertor {
     private static final double UNIT_SIZE = 1024.0;

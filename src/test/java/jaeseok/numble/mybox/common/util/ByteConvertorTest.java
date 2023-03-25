@@ -1,5 +1,6 @@
-package jaeseok.numble.mybox.util;
+package jaeseok.numble.mybox.common.util;
 
+import jaeseok.numble.mybox.common.util.ByteConvertor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

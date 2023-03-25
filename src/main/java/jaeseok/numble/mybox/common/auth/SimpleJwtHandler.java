@@ -2,16 +2,21 @@ package jaeseok.numble.mybox.common.auth;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Component
 public class SimpleJwtHandler implements JwtHandler{
+
+    private final HttpServletRequest request;
 
     @Value("${jwt-token.issue-key}")
     String issueKey;
@@ -40,6 +45,11 @@ public class SimpleJwtHandler implements JwtHandler{
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody().get("id").toString();
+    }
+
+    @Override
+    public String getId() {
+        return getId(request.getHeader("Authorization"));
     }
 
     @Override

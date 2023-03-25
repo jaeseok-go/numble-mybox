@@ -11,7 +11,7 @@ import jaeseok.numble.mybox.member.dto.UsageDto;
 import jaeseok.numble.mybox.member.dto.mapper.MemberInfoDto;
 import jaeseok.numble.mybox.member.dto.mapper.MemberMapper;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
-import jaeseok.numble.mybox.util.ByteConvertor;
+import jaeseok.numble.mybox.common.util.ByteConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,17 +39,16 @@ public class MemberService {
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
         Long usage = fileService.calculateUsageToByte(id);
-        UsageDto usageDto = UsageDto.builder()
-                .B(usage)
-                .KB(ByteConvertor.toKiloBytes(usage))
-                .MB(ByteConvertor.toMegaBytes(usage))
-                .GB(ByteConvertor.toGigaBytes(usage))
-                .build();
 
         return MemberInfoDto.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
-                .usage(usageDto)
+                .usage(UsageDto.builder()
+                        .B(usage)
+                        .KB(ByteConvertor.toKiloBytes(usage))
+                        .MB(ByteConvertor.toMegaBytes(usage))
+                        .GB(ByteConvertor.toGigaBytes(usage))
+                        .build())
                 .build();
     }
 }
