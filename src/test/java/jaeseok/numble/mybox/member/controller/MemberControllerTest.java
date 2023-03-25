@@ -2,6 +2,7 @@ package jaeseok.numble.mybox.member.controller;
 
 import com.google.gson.Gson;
 import jaeseok.numble.mybox.common.response.MyBoxResponse;
+import jaeseok.numble.mybox.member.dto.LoginDto;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -43,5 +45,39 @@ class MemberControllerTest {
         // then
         MyBoxResponse myBoxResponse = gson.fromJson(response.getContentAsString(), MyBoxResponse.class);
         Assertions.assertTrue(myBoxResponse.isSuccess());
+    }
+
+    @Test
+    @DisplayName("회원 로그인 성공")
+    void loginSuccess() throws Exception {
+        // given
+        MemberSignUpDto signUpInfo = new MemberSignUpDto("test_id3", "password", "test_nickname");
+        Gson gson = new Gson();
+        String signUpBody = gson.toJson(signUpInfo);
+
+        // 회원정보 생성
+        mockMvc.perform(post("/api/v1/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(signUpBody))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        LoginDto loginDto = new LoginDto("test_id3", "password");
+        String signInBody = gson.toJson(loginDto);
+
+        // when
+        MockHttpServletResponse response = mockMvc
+                .perform(post("/api/v1/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(signInBody))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        MyBoxResponse myBoxResponse = gson.fromJson(response.getContentAsString(), MyBoxResponse.class);
+        String accessToken = (String) myBoxResponse.getContent();
+
+        // then
+        Assertions.assertTrue(myBoxResponse.isSuccess());
+        Assertions.assertTrue(accessToken.contains("."));
     }
 }

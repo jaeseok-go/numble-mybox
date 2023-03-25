@@ -36,7 +36,7 @@ public class MemberService {
 
     public MemberInfoDto retrieveMember() {
         String id = jwtHandler.getId();
-        
+
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
