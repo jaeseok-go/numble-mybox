@@ -24,9 +24,9 @@ public class FileService {
         folder.validateOwner(memberId);
 
         try {
-            return fileRepository.deleteByOwnerAndParentPathStartsWith(memberId, folder.getCurrentPath());
+            return fileRepository.deleteByParent(folder.getId());
         } catch (Exception e) {
-            throw new MyBoxException(ResponseCode.FILE_DELETE_FAIL);
+            throw new MyBoxException(ResponseCode.FILE_DELETE_FAIL, folder.getCurrentPath());
         }
     }
 }

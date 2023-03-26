@@ -9,5 +9,5 @@ public interface FileRepository extends JpaRepository<File, Long> {
     @Query("SELECT SUM(f.size) FROM File f WHERE f.owner = :memberId")
     Long sumSizeByOwnerId(@Param("memberId") String memberId);
 
-    Long deleteByOwnerAndParentPathStartsWith(String ownerId, String path);
+    Long deleteByParent(Long parentId);
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -38,23 +39,27 @@ public class FolderService {
                 .build());
     }
 
-    @Transactional
-    public Long delete(Long id) {
+    public Integer delete(Long id) {
         Folder folder = folderRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
 
         String memberId = jwtHandler.getId();
         folder.validateOwner(memberId);
 
-        String path = folder.getCurrentPath();
-
-        Long folderDelete = 0L;
-        try {
-            folderDelete = folderRepository.deleteByOwnerAndParentPathStartsWith(memberId, path);
-        } catch (Exception e) {
-            throw new MyBoxException(ResponseCode.FOLDER_DELETE_FAIL);
+        int deleteCount = 0;
+        List<Folder> targets = folderRepository
+                .findByOwnerAndParentPathStartsWithOrderByParentPathDesc(memberId, folder.getCurrentPath());
+        for(Folder target : targets) {
+            fileService.deleteChild(target);
+            deleteCount++;
+            try {
+                folderRepository.deleteById(target.getId());
+                deleteCount++;
+            } catch (Exception e) {
+                throw new MyBoxException(ResponseCode.FOLDER_DELETE_FAIL, target.getCurrentPath());
+            }
         }
 
-        return folderDelete + fileService.deleteChild(folder);
+        return deleteCount;
     }
 }
