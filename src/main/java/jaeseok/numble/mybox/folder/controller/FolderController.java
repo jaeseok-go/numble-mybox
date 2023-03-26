@@ -5,10 +5,7 @@ import jaeseok.numble.mybox.folder.dto.FolderCreateRequestDto;
 import jaeseok.numble.mybox.folder.service.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -20,6 +17,12 @@ public class FolderController {
     @PostMapping("/v1/folder")
     public ResponseEntity createFolder(@RequestBody FolderCreateRequestDto folderCreateRequestDto) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(folderService.create(folderCreateRequestDto));
+        return ResponseEntity.ok(myBoxResponse);
+    }
+
+    @DeleteMapping("/v1/folder/{jd}")
+    public ResponseEntity deleteFolder(@PathVariable Long id) {
+        MyBoxResponse myBoxResponse = new MyBoxResponse(folderService.delete(id));
         return ResponseEntity.ok(myBoxResponse);
     }
 }
