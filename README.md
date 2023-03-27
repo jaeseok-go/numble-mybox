@@ -13,6 +13,245 @@
 
 ## API 목록
 
+<details>
+<summary> 회원 가입 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "test_id",
+      "password": "test1234!@",
+      "nickname": "테스트"
+   }
+  ```
+- response
+   ```
+  {
+      "success": true,
+      "errorCode": "00000000",
+      "content": "test_id"
+   }
+  ```
+  ```
+  {
+      "success": false,
+      "errorCode": "MBER0001",
+      "content": "Member who already exists."
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 로그인 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/login
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 회원정보 조회 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 폴더 생성 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 폴더 삭제 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 자식 파일/폴더 조회 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 파일 업로드 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 파일 다운로드 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 파일 삭제 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
+<details>
+<summary> 폴더 다운로드 API </summary>
+<div markdown="1">
+
+- method: POST
+- url: /api/v1/members
+- request
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+- response
+   ```
+  {
+      "id": "strings",
+      "password": "strings"
+   }
+  ```
+</div>
+</details>
+
 ## ERD
 <img src="./docs-img/erd.png"  width="70%" height="50%"/>
 
