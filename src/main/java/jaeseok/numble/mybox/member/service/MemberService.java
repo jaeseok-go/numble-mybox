@@ -26,7 +26,7 @@ public class MemberService {
     private final JwtHandler jwtHandler;
     private final FileService fileService;
 
-    public Member signUp(MemberSignUpDto memberSignUpDto) {
+    public String signUp(MemberSignUpDto memberSignUpDto) {
         Optional<Member> memberOptional = memberRepository.findById(memberSignUpDto.getId());
 
         if (memberOptional.isPresent()) {
@@ -34,7 +34,9 @@ public class MemberService {
         }
 
         Member member = MemberMapper.INSTANCE.toMember(memberSignUpDto);
-        return memberRepository.save(member);
+        memberRepository.save(member);
+
+        return member.getId();
     }
 
     public String login(LoginDto loginDto) {
