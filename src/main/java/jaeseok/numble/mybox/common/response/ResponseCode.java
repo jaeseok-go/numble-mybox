@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum ResponseCode {
     SUCCESS("00000000", "There is no exception."),
-    MEMBER_NOT_FOUND("MBER0001", "Member is not found."),
+    MEMBER_EXIST("MBER0001", "Member who already exists."),
+    MEMBER_NOT_FOUND("MBER0002", "Member is not found."),
     INVALID_TOKEN("AUTH0001", "Token is expired."),
     FILE_UPLOAD_FAIL("FILE0001", "Fail to upload file."),
     FILE_DELETE_FAIL("FILE0002", "Fail to delete file under []."),
