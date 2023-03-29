@@ -1,5 +1,7 @@
 package jaeseok.numble.mybox.member.domain;
 
+import jaeseok.numble.mybox.common.response.ResponseCode;
+import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +33,11 @@ public class Member {
     @Override
     public boolean equals(Object object) {
         return object instanceof Member && this.id.equals(((Member) object).id);
+    }
+
+    public void validatePassword(String password) {
+        if (!password.equals(this.password)) {
+            throw new MyBoxException(ResponseCode.INVALID_PASSWORD);
+        }
     }
 }

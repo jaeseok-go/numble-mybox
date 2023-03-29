@@ -19,7 +19,7 @@ class SimpleJwtHandlerTest {
 
     @Nested
     @DisplayName("jwt 생성")
-    class create {
+    class Create {
         @Test
         @DisplayName("성공")
         void success() {
@@ -37,7 +37,7 @@ class SimpleJwtHandlerTest {
 
     @Nested
     @DisplayName("jwt에서 회원id를 획득")
-    class getId {
+    class GetId {
         @Test
         @DisplayName("성공")
         void success() {
@@ -68,7 +68,7 @@ class SimpleJwtHandlerTest {
 
     @Nested
     @DisplayName("jwt 유효성 검증")
-    class validate {
+    class Validate {
         @Test
         @DisplayName("성공")
         void success() {

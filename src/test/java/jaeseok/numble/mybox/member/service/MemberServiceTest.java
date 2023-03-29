@@ -1,6 +1,8 @@
 package jaeseok.numble.mybox.member.service;
 
+import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
+import jaeseok.numble.mybox.member.dto.LoginDto;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +42,7 @@ class MemberServiceTest {
 
         @Test
         @DisplayName("이미 존재하는 회원 id가 있는 경우 실패")
-        void fail_to_duplicate() {
+        void duplicated_id_fail() {
             // given
             MemberSignUpDto memberSignUpDto = new MemberSignUpDto(id, password, nickname);
             memberService.signUp(memberSignUpDto);
@@ -51,6 +53,58 @@ class MemberServiceTest {
             // then
             MyBoxException e = Assertions.assertThrows(MyBoxException.class, signUp);
             Assertions.assertEquals(e.getErrorCode(), "MBER0001");
+        }
+    }
+
+    @Nested
+    @DisplayName("로그인")
+    class Login {
+        @Test
+        @DisplayName("성공")
+        void success() {
+            // given
+            memberService.signUp(new MemberSignUpDto(id, password, nickname));
+
+            // when
+            String jwt = memberService.login(new LoginDto(id, password));
+
+            // then
+            Assertions.assertTrue(jwt instanceof String);
+            Assertions.assertTrue(jwt.contains("."));
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 id 입력 시 실패")
+        void not_exist_id_fail() {
+            // given
+            memberService.signUp(new MemberSignUpDto(id, password, nickname));
+
+            // when
+            Executable login = () -> memberService.login(new LoginDto("not_exist_id", password));
+
+            // then
+            MyBoxException e = Assertions.assertThrows(MyBoxException.class, login);
+
+            String memberNotFoundCode = ResponseCode.MEMBER_NOT_FOUND.getCode();
+            String errorCode = e.getErrorCode();
+            Assertions.assertEquals(memberNotFoundCode, errorCode);
+        }
+
+        @Test
+        @DisplayName("유효하지 않은 password 입력 시 실패")
+        void invalid_password_fail() {
+            // given
+            memberService.signUp(new MemberSignUpDto(id, password, nickname));
+
+            // when
+            Executable login = () -> memberService.login(new LoginDto(id, "invalid_password"));
+
+            // then
+            MyBoxException e = Assertions.assertThrows(MyBoxException.class, login);
+
+            String invalidPasswordCode = ResponseCode.INVALID_PASSWORD.getCode();
+            String errorCode = e.getErrorCode();
+            Assertions.assertEquals(invalidPasswordCode, errorCode);
         }
     }
 }

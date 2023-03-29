@@ -40,8 +40,10 @@ public class MemberService {
     }
 
     public String login(LoginDto loginDto) {
-        memberRepository.findById(loginDto.getId())
+        Member member = memberRepository.findById(loginDto.getId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
+
+        member.validatePassword(loginDto.getPassword());
 
         return jwtHandler.create(loginDto.getId());
     }
