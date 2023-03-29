@@ -2,6 +2,7 @@ package jaeseok.numble.mybox.common.auth;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,76 +10,89 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
+@DisplayName("SimpleJwtHandler Class")
 @SpringBootTest
 class SimpleJwtHandlerTest {
 
     @Autowired
     private JwtHandler jwtHandler;
 
-    @Test
-    @DisplayName("Jwt 생성 : 성공")
-    void testCreate() {
-        // given
-        String id = "test_id";
+    @Nested
+    @DisplayName("jwt 생성")
+    class Create {
+        @Test
+        @DisplayName("성공")
+        void success() {
+            // given
+            String id = "test_id";
 
-        // when
-        String jwt = jwtHandler.create(id);
+            // when
+            String jwt = jwtHandler.create(id);
 
-        // then
-        Assertions.assertInstanceOf(String.class, jwt);
-        Assertions.assertTrue(!jwt.isBlank());
+            // then
+            Assertions.assertInstanceOf(String.class, jwt);
+            Assertions.assertTrue(!jwt.isBlank());
+        }
     }
 
-    @Test
-    @DisplayName("Jwt getId : 성공")
-    void testGetIdSuccess() {
-        // given
-        String inputId = "test_id";
+    @Nested
+    @DisplayName("jwt에서 회원id를 획득")
+    class GetId {
+        @Test
+        @DisplayName("성공")
+        void success() {
+            // given
+            String inputId = "test_id";
 
-        // when
-        String jwt = jwtHandler.create(inputId);
-        String outputId = jwtHandler.getId(jwt);
+            // when
+            String jwt = jwtHandler.create(inputId);
+            String outputId = jwtHandler.getId(jwt);
 
-        // then
-        Assertions.assertEquals(inputId, outputId);
+            // then
+            Assertions.assertEquals(inputId, outputId);
+        }
+
+        @Test
+        @DisplayName("유효하지 않은 jwt를 입력받는 경우 실패")
+        void fail() {
+            // given
+            String jwt = "tr.ash_val.ue";
+
+            // when
+            Executable getId = () -> jwtHandler.getId(jwt);
+
+            // then
+            Assertions.assertThrows(ClassCastException.class, getId);
+        }
     }
 
-    @Test
-    @DisplayName("Jwt getId : 실패")
-    void testGetIdFail() {
-        // given
-        String jwt = "tr.ash_val.ue";
+    @Nested
+    @DisplayName("jwt 유효성 검증")
+    class Validate {
+        @Test
+        @DisplayName("성공")
+        void success() {
+            // given
+            String id = "test_id";
 
-        // when
-        Executable getId = () -> jwtHandler.getId(jwt);
+            // when
+            String jwt = jwtHandler.create(id);
 
-        // then
-        Assertions.assertThrows(ClassCastException.class, getId);
-    }
+            // then
+            Assertions.assertTrue(jwtHandler.validate(jwt));
+        }
 
-    @Test
-    @DisplayName("Jwt validate : 성공")
-    void testValidateSuccess() {
-        // given
-        String id = "test_id";
+        @Test
+        @DisplayName("유효하지 않은 jwt를 입력받는 경우 실패")
+        void fail() {
+            // given
+            String jwt = "tra.sh_val.ue";
 
-        // when
-        String jwt = jwtHandler.create(id);
+            // when
+            Boolean validate = jwtHandler.validate(jwt);
 
-        // then
-        Assertions.assertTrue(jwtHandler.validate(jwt));
-    }
-
-    @Test
-    @DisplayName("Jwt validate : 실패")
-    void testValidateFail() {
-        // given
-        String jwt = "trash_value";
-
-        // when
-        Boolean validate = jwtHandler.validate(jwt);
-
-        // then
-        Assertions.assertFalse(validate);
+            // then
+            Assertions.assertFalse(validate);
+        }
     }
 }
