@@ -1,7 +1,6 @@
 package jaeseok.numble.mybox.member.service;
 
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 @Transactional
 @DisplayName("MemberService Class")
@@ -42,7 +39,7 @@ class MemberServiceTest {
         }
 
         @Test
-        @DisplayName("실패 - 중복")
+        @DisplayName("이미 존재하는 회원 id가 있는 경우 실패")
         void fail_to_duplicate() {
             // given
             MemberSignUpDto memberSignUpDto = new MemberSignUpDto(id, password, nickname);

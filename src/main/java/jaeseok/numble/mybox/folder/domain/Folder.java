@@ -47,6 +47,7 @@ public class Folder {
     @JoinColumn(name = "parent_id", nullable = true)
     private Folder parent;
 
+
     public String getCurrentPath() {
         return this.getParentPath() + FOLDER_SEPARATOR + this.getName();
     }
