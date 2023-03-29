@@ -54,15 +54,21 @@
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
+      "id": "test_id",
+      "password": "test1234!@"
    }
   ```
 - response
    ```
   {
-      "id": "strings",
-      "password": "strings"
+      "jwt": "strings"
+   }
+  ```
+    ```
+  {
+      "success": false,
+      "errorCode": "MBER0003",
+      "content": "Password is invalid."
    }
   ```
 </div>
@@ -72,21 +78,32 @@
 <summary> 회원정보 조회 API </summary>
 <div markdown="1">
 
-- method: POST
-- url: /api/v1/members
+- method: GET
+- url: /api/v1/member
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+  }
   ```
 - response
    ```
   {
-      "id": "strings",
-      "password": "strings"
+      "id": "test_id",
+      "nickname": "jaeseok-go",
+      "usage": {
+                  "B": "14873015",
+                  "KB": "14524.428710",
+                  "MB": "14.184012",
+                  "GB": "0.013851"
+                }
    }
+  ```
+  ```
+  {
+  "success": false,
+  "errorCode": "MBER0002",
+  "content": "Member is not found."
+  }
   ```
 </div>
 </details>
