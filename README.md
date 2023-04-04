@@ -61,10 +61,15 @@
 - response
    ```
   {
-      "jwt": "strings"
+      "success": true,
+      "errorCode": "00000000",
+      "content": {
+                    "jwt": "strings"
+                  }
+      
    }
   ```
-    ```
+  ```
   {
       "success": false,
       "errorCode": "MBER0003",
@@ -88,21 +93,26 @@
 - response
    ```
   {
-      "id": "test_id",
-      "nickname": "jaeseok-go",
-      "usage": {
-                  "B": "14873015",
-                  "KB": "14524.428710",
-                  "MB": "14.184012",
-                  "GB": "0.013851"
+    "success": true,
+    "errorCode": "00000000",
+    "content": {
+                  "id": "test_id",
+                  "nickname": "jaeseok-go",
+                  "usage": {
+                              "B": "14873015",
+                              "KB": "14524.428710",
+                              "MB": "14.184012",
+                              "GB": "0.013851"
+                            }
                 }
-   }
+
+  }
   ```
   ```
   {
-  "success": false,
-  "errorCode": "MBER0002",
-  "content": "Member is not found."
+    "success": false,
+    "errorCode": "MBER0002",
+    "content": "Member is not found."
   }
   ```
 </div>
@@ -113,20 +123,28 @@
 <div markdown="1">
 
 - method: POST
-- url: /api/v1/members
+- url: /api/v1/folder
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
+      "id": 1,
+      "name": "test_folder"
    }
   ```
 - response
-   ```
+  ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": true,
+    "errorCode": "00000000",
+    "content": 5
+  }
+  ```
+  ```
+  {
+    "success": false,
+    "errorCode": "FLDR0001",
+    "content": "Parent folder is not found."
+  }
   ```
 </div>
 </details>
@@ -135,21 +153,27 @@
 <summary> 폴더 삭제 API </summary>
 <div markdown="1">
 
-- method: POST
-- url: /api/v1/members
+- method: DELETE
+- url: /api/v1/folder/{id}
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
    }
   ```
 - response
-   ```
+  ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": true,
+    "errorCode": "00000000",
+    "content": 10
+  }
+  ```
+  ```
+  {
+    "success": false,
+    "errorCode": "FLDR0002",
+    "content": "Folder is not found."
+  }
   ```
 </div>
 </details>
@@ -158,21 +182,51 @@
 <summary> 자식 파일/폴더 조회 API </summary>
 <div markdown="1">
 
-- method: POST
-- url: /api/v1/members
+- method: GET
+- url: /api/v1/folder/{id}
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
    }
   ```
 - response
-   ```
+  ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": true,
+    "errorCode": "00000000",
+    "content": {
+                  "id": 10,
+                  "name": "test_parent",
+                  "createdAt": "2022-01-20 11:20:00"
+                  "modifiedAt": "2022-01-20 11:20:00"
+                  "children": {
+                                "folders": [
+                                              {
+                                                "id": 11,
+                                                "name": "test_child_folder",
+                                                "createdAt": "2022-01-20 11:20:00"
+                                                "modifiedAt": "2022-01-20 11:20:00"
+                                              }
+                                            ],
+                                "files": [
+                                            {
+                                              "id": 11,
+                                              "name": "test_child_folder",
+                                              "size": 1724838
+                                              "createdAt": "2022-01-20 11:20:00"
+                                              "modifiedAt": "2022-01-20 11:20:00"
+                                            }
+                                          ]
+                              }
+                }
+  }
+  ```
+  ```
+  {
+    "success": false,
+    "errorCode": "FLDR0002",
+    "content": "Folder is not found."
+  }
   ```
 </div>
 </details>
@@ -182,20 +236,27 @@
 <div markdown="1">
 
 - method: POST
-- url: /api/v1/members
+- url: /api/v1/file
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "name": "strings"
+  }
   ```
 - response
-   ```
+  ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": true,
+    "errorCode": "00000000",
+    "content": 15
+  }
+  ```
+  ```
+  {
+    "success": false,
+    "errorCode": "FILE0001",
+    "content": "Fail to upload file."
+  }
   ```
 </div>
 </details>
@@ -204,21 +265,27 @@
 <summary> 파일 다운로드 API </summary>
 <div markdown="1">
 
-- method: POST
-- url: /api/v1/members
+- method: GET
+- url: /api/v1/file/{id}
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
    }
   ```
 - response
-   ```
+  ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": true,
+    "errorCode": "00000000",
+    "content": 15
+  }
+  ```
+  ```
+  {
+    "success": false,
+    "errorCode": "FILE0003",
+    "content": "Fail to download file."
+  }
   ```
 </div>
 </details>
@@ -227,44 +294,27 @@
 <summary> 파일 삭제 API </summary>
 <div markdown="1">
 
-- method: POST
-- url: /api/v1/members
+- method: DELETE
+- url: /api/v1/file/{id}
 - request
    ```
   {
-      "id": "strings",
-      "password": "strings"
    }
   ```
 - response
-   ```
-  {
-      "id": "strings",
-      "password": "strings"
-   }
   ```
-</div>
-</details>
-
-<details>
-<summary> 폴더 다운로드 API </summary>
-<div markdown="1">
-
-- method: POST
-- url: /api/v1/members
-- request
-   ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": true,
+    "errorCode": "00000000",
+    "content": 15
+  }
   ```
-- response
-   ```
+  ```
   {
-      "id": "strings",
-      "password": "strings"
-   }
+    "success": false,
+    "errorCode": "FILE0002",
+    "content": "Fail to delete file under []."
+  }
   ```
 </div>
 </details>
