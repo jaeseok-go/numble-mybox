@@ -236,11 +236,10 @@
 <div markdown="1">
 
 - method: POST
-- url: /api/v1/file
+- url: /api/v1/{parentId}/file
 - request
    ```
   {
-    "name": "strings"
   }
   ```
 - response
