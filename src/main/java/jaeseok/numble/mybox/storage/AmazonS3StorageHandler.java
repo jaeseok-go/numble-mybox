@@ -10,21 +10,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RequiredArgsConstructor
-public class AmazonS3StorageHandler implements StorageHandler{
+public class AmazonS3StorageHandler implements StorageHandler {
     private final AmazonS3Client amazonS3Client;
     private final String bucket;
 
-    public String upload(MultipartFile file, String name) {
+    public String upload(MultipartFile file, String path) throws IOException{
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
         metadata.setContentLength(file.getSize());
 
-        try {
-            amazonS3Client.putObject(bucket, name, file.getInputStream(), metadata);
-        } catch (IOException e) {
-            throw new MyBoxException(ResponseCode.FILE_UPLOAD_FAIL);
-        }
+        amazonS3Client.putObject(bucket, path, file.getInputStream(), metadata);
 
-        return "https://" + bucket + name;
+        return "https://" + bucket + path;
     }
 }
