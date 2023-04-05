@@ -11,6 +11,8 @@ import org.hibernate.annotations.ColumnDefault;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FILE_SEPARATOR;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -47,4 +49,8 @@ public class File {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", nullable = true)
     private Folder parent;
+
+    public String getCurrentPath() {
+        return this.getParentPath() + FILE_SEPARATOR + this.getName();
+    }
 }
