@@ -1,5 +1,6 @@
 package jaeseok.numble.mybox.folder.domain;
 
+import jaeseok.numble.mybox.common.entity.BaseEntity;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.member.domain.Member;
@@ -20,7 +21,7 @@ import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FOLDER_SEPARATO
 @Getter
 @Builder
 @Table(name = "folder")
-public class Folder {
+public class Folder extends BaseEntity {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,12 +33,6 @@ public class Folder {
     @Column(name = "parent_path", nullable = false, columnDefinition = "VARCHAR(2000) DEFAULT '/'")
     @ColumnDefault("/")
     private String parentPath;
-
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
-
-    @Column(name = "modified_at", nullable = true)
-    private LocalDateTime modifiedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)

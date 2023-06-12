@@ -36,7 +36,6 @@ public class FileService {
                 .size(file.getSize())
                 .owner(parent.getOwner())
                 .parentPath(parent.getCurrentPath())
-                .createdAt(LocalDateTime.now())
                 .build());
 
         try {

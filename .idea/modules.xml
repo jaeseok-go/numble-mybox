@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jaeseok.numble.mybox.main.iml" filepath="$PROJECT_DIR$/.idea/modules/jaeseok.numble.mybox.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/mybox.main.iml" filepath="$PROJECT_DIR$/.idea/modules/mybox.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/mybox.test.iml" filepath="$PROJECT_DIR$/.idea/modules/mybox.test.iml" />
     </modules>
   </component>
 </project>

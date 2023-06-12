@@ -7,8 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
-
 @DisplayName("MemberMapper Class")
 @SpringBootTest
 class MemberMapperTest {
@@ -23,7 +21,6 @@ class MemberMapperTest {
         Member expect = Member.builder()
                 .id(id).password(password)
                 .nickname(nickname)
-                .createdAt(LocalDateTime.now())
                 .build();
 
         // when

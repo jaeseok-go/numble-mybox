@@ -24,7 +24,7 @@ public class FolderService {
 
     private final JwtHandler jwtHandler;
 
-    public Folder create(FolderCreateRequestDto folderCreateRequestDto) {
+    public Long create(FolderCreateRequestDto folderCreateRequestDto) {
         Folder parent = folderRepository.findById(folderCreateRequestDto.getParentId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
@@ -36,7 +36,7 @@ public class FolderService {
                 .parent(parent)
                 .owner(parent.getOwner())
                 .createdAt(LocalDateTime.now())
-                .build());
+                .build()).getId();
     }
 
     public Integer delete(Long id) {
