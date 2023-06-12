@@ -1,33 +1,24 @@
 package jaeseok.numble.mybox.file.domain;
 
-import jaeseok.numble.mybox.common.entity.BaseEntity;
-import jaeseok.numble.mybox.folder.domain.Folder;
+import jaeseok.numble.mybox.folder.domain.Element;
 import jaeseok.numble.mybox.member.domain.Member;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FILE_SEPARATOR;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "file")
-public class File extends BaseEntity {
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
+public class File extends Element {
 
     @Column(name = "size", nullable = false)
     @ColumnDefault("0")
@@ -40,10 +31,6 @@ public class File extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private Member owner;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", nullable = true)
-    private Folder parent;
 
     public String getCurrentPath() {
         return this.getParentPath() + FILE_SEPARATOR + this.getName();
