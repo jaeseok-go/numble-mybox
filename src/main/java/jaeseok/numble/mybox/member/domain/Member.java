@@ -1,22 +1,21 @@
 package jaeseok.numble.mybox.member.domain;
 
+import jaeseok.numble.mybox.common.entity.BaseEntity;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Getter
-@Builder
-@Table(name="member")
-public class Member {
+@SuperBuilder
+public class Member extends BaseEntity {
     @Id
     @Column(name = "id", nullable = false, length = 100)
     private String id;
@@ -26,9 +25,6 @@ public class Member {
 
     @Column(name = "nickname", nullable = false, length = 30)
     private String nickname;
-
-    @Column(name = "created_at",nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
 
     @Override
     public boolean equals(Object object) {

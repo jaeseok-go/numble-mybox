@@ -2,51 +2,41 @@ package jaeseok.numble.mybox.folder.domain;
 
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
+import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FOLDER_SEPARATOR;
 
+@Getter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Getter
-@Builder
-@Table(name = "folder")
-public class Folder {
-    @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "parent_path", nullable = false, columnDefinition = "VARCHAR(2000) DEFAULT '/'")
-    @ColumnDefault("/")
-    private String parentPath;
-
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime createdAt;
-
-    @Column(name = "modified_at", nullable = true)
-    private LocalDateTime modifiedAt;
+@DiscriminatorValue("folder")
+public class Folder extends Element {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
     private Member owner;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", nullable = true)
-    private Folder parent;
+    @Builder.Default
+    @OneToMany(mappedBy = "parent")
+    private List<Folder> childFolders = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "parent")
+    private List<File> childFiles = new ArrayList<>();
 
     public String getCurrentPath() {
         return this.getParentPath() + FOLDER_SEPARATOR + this.getName();

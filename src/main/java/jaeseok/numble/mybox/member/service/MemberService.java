@@ -9,11 +9,9 @@ import jaeseok.numble.mybox.member.dto.LoginDto;
 import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
 import jaeseok.numble.mybox.member.dto.UsageDto;
 import jaeseok.numble.mybox.member.dto.MemberInfoDto;
-import jaeseok.numble.mybox.member.dto.mapper.MemberMapper;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
 import jaeseok.numble.mybox.common.util.ByteConvertor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -33,8 +31,11 @@ public class MemberService {
             throw new MyBoxException(ResponseCode.MEMBER_EXIST);
         }
 
-        Member member = MemberMapper.INSTANCE.toMember(memberSignUpDto);
-        memberRepository.save(member);
+        Member member = memberRepository.save(Member.builder()
+                .id(memberSignUpDto.getId())
+                .password(memberSignUpDto.getPassword())
+                .nickname(memberSignUpDto.getNickname())
+                .build());
 
         return member.getId();
     }

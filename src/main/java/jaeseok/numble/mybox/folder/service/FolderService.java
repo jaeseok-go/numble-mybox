@@ -9,7 +9,6 @@ import jaeseok.numble.mybox.folder.dto.FolderCreateRequestDto;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +23,7 @@ public class FolderService {
 
     private final JwtHandler jwtHandler;
 
-    public Folder create(FolderCreateRequestDto folderCreateRequestDto) {
+    public Long create(FolderCreateRequestDto folderCreateRequestDto) {
         Folder parent = folderRepository.findById(folderCreateRequestDto.getParentId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
@@ -36,7 +35,7 @@ public class FolderService {
                 .parent(parent)
                 .owner(parent.getOwner())
                 .createdAt(LocalDateTime.now())
-                .build());
+                .build()).getId();
     }
 
     public Integer delete(Long id) {

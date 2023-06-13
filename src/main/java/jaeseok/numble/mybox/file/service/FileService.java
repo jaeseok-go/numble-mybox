@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Service
@@ -36,7 +35,6 @@ public class FileService {
                 .size(file.getSize())
                 .owner(parent.getOwner())
                 .parentPath(parent.getCurrentPath())
-                .createdAt(LocalDateTime.now())
                 .build());
 
         try {
