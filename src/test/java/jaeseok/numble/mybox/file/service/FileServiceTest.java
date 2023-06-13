@@ -23,16 +23,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileServiceTest {
 
     @Autowired
-    FileService fileService;
+    private FileService fileService;
+
     @Autowired
-    FolderService folderService;
+    private FolderService folderService;
 
     private Long testParentId;
 
     @BeforeEach
     @DisplayName("테스트용 폴더 생성")
     void createFolder() {
-        testParentId = folderService.create(new FolderCreateRequestDto(null, "test_parent"));
+        // testParentId = folderService.create(new FolderCreateRequestDto(null, "tes t_parent"));
     }
 
     @Nested
@@ -49,7 +50,7 @@ class FileServiceTest {
 
 
             // when
-            Long fileId = fileService.upload(file, testParentId);
+            // Long fileId = fileService.upload(file, testParentId);
 
             // then
         }

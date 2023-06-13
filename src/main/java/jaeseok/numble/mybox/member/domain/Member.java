@@ -4,9 +4,9 @@ import jaeseok.numble.mybox.common.entity.BaseEntity;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -14,8 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Getter
-@Builder
-@Table(name="member")
+@SuperBuilder
 public class Member extends BaseEntity {
     @Id
     @Column(name = "id", nullable = false, length = 100)

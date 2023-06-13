@@ -12,21 +12,17 @@ import javax.persistence.*;
 
 import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FILE_SEPARATOR;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "file")
+@DiscriminatorValue("file")
 public class File extends Element {
 
     @Column(name = "size", nullable = false)
     @ColumnDefault("0")
     private Long size;
-
-    @Column(name = "parent_path", nullable = false, columnDefinition = "VARCHAR(2000) DEFAULT '/'")
-    @ColumnDefault("/")
-    private String parentPath;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", nullable = false)
