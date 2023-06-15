@@ -23,6 +23,7 @@ public class Member extends BaseEntity {
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
+    @Convert(converter = PasswordConverter.class)
     @Column(name = "password", nullable = false, length = 256)
     private String password;
 
