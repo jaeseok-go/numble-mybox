@@ -2,8 +2,8 @@ package jaeseok.numble.mybox.member.controller;
 
 import com.google.gson.Gson;
 import jaeseok.numble.mybox.common.response.MyBoxResponse;
-import jaeseok.numble.mybox.member.dto.LoginDto;
-import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
+import jaeseok.numble.mybox.member.dto.LoginParam;
+import jaeseok.numble.mybox.member.dto.SignUpParam;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 API 성공")
     void signUpSuccess() throws Exception {
         // given
-        MemberSignUpDto signUpInfo = new MemberSignUpDto("test_id2", "password", "test_nickname");
+        SignUpParam signUpInfo = new SignUpParam("test_id2", "password", "test_nickname");
         Gson gson = new Gson();
         String body = gson.toJson(signUpInfo);
 
@@ -51,7 +51,7 @@ class MemberControllerTest {
     @DisplayName("회원 로그인 성공")
     void loginSuccess() throws Exception {
         // given
-        MemberSignUpDto signUpInfo = new MemberSignUpDto("test_id3", "password", "test_nickname");
+        SignUpParam signUpInfo = new SignUpParam("test_id3", "password", "test_nickname");
         Gson gson = new Gson();
         String signUpBody = gson.toJson(signUpInfo);
 
@@ -62,8 +62,8 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
-        LoginDto loginDto = new LoginDto("test_id3", "password");
-        String signInBody = gson.toJson(loginDto);
+        LoginParam loginParam = new LoginParam("test_id3", "password");
+        String signInBody = gson.toJson(loginParam);
 
         // when
         MockHttpServletResponse response = mockMvc

@@ -2,8 +2,9 @@ package jaeseok.numble.mybox.member.service;
 
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import jaeseok.numble.mybox.member.dto.LoginDto;
-import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
+import jaeseok.numble.mybox.member.dto.LoginParam;
+import jaeseok.numble.mybox.member.dto.SignUpParam;
+import jaeseok.numble.mybox.member.dto.SignUpResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,7 +21,7 @@ class MemberServiceTest {
     @Autowired
     MemberService memberService;
 
-    private String id = "test_id";
+    private String email = "test_id";
     private String password = "1234";
     private String nickname = "테스트_닉네임";
 
@@ -31,24 +32,24 @@ class MemberServiceTest {
         @DisplayName("성공")
         void success() {
             // given
-            MemberSignUpDto memberSignUpDto = new MemberSignUpDto(id, password, nickname);
+            SignUpParam signUpParam = new SignUpParam(email, password, nickname);
 
             // when
-            String memberId = memberService.signUp(memberSignUpDto);
+            SignUpResponse response = memberService.signUp(signUpParam);
 
             // then
-            Assertions.assertEquals(id, memberId);
+            Assertions.assertEquals(response.getEmail(), email);
         }
 
         @Test
         @DisplayName("이미 존재하는 회원 id가 있는 경우 실패")
         void duplicated_id_fail() {
             // given
-            MemberSignUpDto memberSignUpDto = new MemberSignUpDto(id, password, nickname);
-            memberService.signUp(memberSignUpDto);
+            SignUpParam signUpParam = new SignUpParam(email, password, nickname);
+            memberService.signUp(signUpParam);
 
             // when
-            Executable signUp = () -> memberService.signUp(memberSignUpDto);
+            Executable signUp = () -> memberService.signUp(signUpParam);
 
             // then
             MyBoxException e = Assertions.assertThrows(MyBoxException.class, signUp);
@@ -63,10 +64,10 @@ class MemberServiceTest {
         @DisplayName("성공")
         void success() {
             // given
-            memberService.signUp(new MemberSignUpDto(id, password, nickname));
+            memberService.signUp(new SignUpParam(email, password, nickname));
 
             // when
-            String jwt = memberService.login(new LoginDto(id, password));
+            String jwt = memberService.login(new LoginParam(email, password));
 
             // then
             Assertions.assertTrue(jwt instanceof String);
@@ -77,10 +78,10 @@ class MemberServiceTest {
         @DisplayName("존재하지 않는 id 입력 시 실패")
         void not_exist_id_fail() {
             // given
-            memberService.signUp(new MemberSignUpDto(id, password, nickname));
+            memberService.signUp(new SignUpParam(email, password, nickname));
 
             // when
-            Executable login = () -> memberService.login(new LoginDto("not_exist_id", password));
+            Executable login = () -> memberService.login(new LoginParam("not_exist_id", password));
 
             // then
             MyBoxException e = Assertions.assertThrows(MyBoxException.class, login);
@@ -94,10 +95,10 @@ class MemberServiceTest {
         @DisplayName("유효하지 않은 password 입력 시 실패")
         void invalid_password_fail() {
             // given
-            memberService.signUp(new MemberSignUpDto(id, password, nickname));
+            memberService.signUp(new SignUpParam(email, password, nickname));
 
             // when
-            Executable login = () -> memberService.login(new LoginDto(id, "invalid_password"));
+            Executable login = () -> memberService.login(new LoginParam(email, "invalid_password"));
 
             // then
             MyBoxException e = Assertions.assertThrows(MyBoxException.class, login);

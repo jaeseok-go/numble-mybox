@@ -1,6 +1,5 @@
 package jaeseok.numble.mybox.member.dto;
 
-import jaeseok.numble.mybox.member.dto.UsageDto;
 import lombok.*;
 
 @NoArgsConstructor
@@ -8,8 +7,8 @@ import lombok.*;
 @Setter
 @Getter
 @Builder
-public class MemberInfoDto {
-    private String id;
-    private String nickname;
+public class MemberInfoResponse {
+    private Long id;
+    private String email;
     private UsageDto usage;
  }

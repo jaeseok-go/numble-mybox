@@ -7,8 +7,10 @@ import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.dto.FolderCreateRequestDto;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
+import jaeseok.numble.mybox.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +38,14 @@ public class FolderService {
                 .owner(parent.getOwner())
                 .createdAt(LocalDateTime.now())
                 .build()).getId();
+    }
+
+    public Long createRoot(Member member) {
+        Folder root = folderRepository.save(Folder.builder()
+                .owner(member)
+                .build());
+
+        return root.getId();
     }
 
     public Integer delete(Long id) {

@@ -4,15 +4,14 @@ import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.service.FileService;
+import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
-import jaeseok.numble.mybox.member.dto.LoginDto;
-import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
-import jaeseok.numble.mybox.member.dto.UsageDto;
-import jaeseok.numble.mybox.member.dto.MemberInfoDto;
+import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
 import jaeseok.numble.mybox.common.util.ByteConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -21,35 +20,38 @@ import java.util.Optional;
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final FolderService folderService;
     private final JwtHandler jwtHandler;
     private final FileService fileService;
 
-    public String signUp(MemberSignUpDto memberSignUpDto) {
-        Optional<Member> memberOptional = memberRepository.findById(memberSignUpDto.getId());
+    @Transactional
+    public SignUpResponse signUp(SignUpParam signUpParam) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(signUpParam.getEmail());
 
         if (memberOptional.isPresent()) {
             throw new MyBoxException(ResponseCode.MEMBER_EXIST);
         }
 
         Member member = memberRepository.save(Member.builder()
-                .id(memberSignUpDto.getId())
-                .password(memberSignUpDto.getPassword())
-                .nickname(memberSignUpDto.getNickname())
+                .email(signUpParam.getEmail())
+                .password(signUpParam.getPassword())
                 .build());
 
-        return member.getId();
+        member.createRootFolder();
+
+        return new SignUpResponse(member.getId(), member.getEmail());
     }
 
-    public String login(LoginDto loginDto) {
-        Member member = memberRepository.findById(loginDto.getId())
+    public String login(LoginParam loginParam) {
+        Member member = memberRepository.findById(loginParam.getId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
-        member.validatePassword(loginDto.getPassword());
+        member.validatePassword(loginParam.getPassword());
 
-        return jwtHandler.create(loginDto.getId());
+        return jwtHandler.create(loginParam.getId());
     }
 
-    public MemberInfoDto retrieveMember() {
+    public MemberInfoResponse retrieveMember() {
         String id = jwtHandler.getId();
 
         Member member = memberRepository.findById(id)
@@ -57,9 +59,8 @@ public class MemberService {
 
         Long usage = fileService.calculateUsageToByte(id);
 
-        return MemberInfoDto.builder()
-                .id(member.getId())
-                .nickname(member.getNickname())
+        return MemberInfoResponse.builder()
+                .email(member.getEmail())
                 .usage(UsageDto.builder()
                         .B(usage)
                         .KB(ByteConvertor.toKiloBytes(usage))
