@@ -2,7 +2,7 @@ package jaeseok.numble.mybox.member.service;
 
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import jaeseok.numble.mybox.member.dto.LoginDto;
+import jaeseok.numble.mybox.member.dto.LoginParam;
 import jaeseok.numble.mybox.member.dto.SignUpParam;
 import jaeseok.numble.mybox.member.dto.SignUpResponse;
 import org.junit.jupiter.api.Assertions;
@@ -67,7 +67,7 @@ class MemberServiceTest {
             memberService.signUp(new SignUpParam(email, password, nickname));
 
             // when
-            String jwt = memberService.login(new LoginDto(email, password));
+            String jwt = memberService.login(new LoginParam(email, password));
 
             // then
             Assertions.assertTrue(jwt instanceof String);
@@ -81,7 +81,7 @@ class MemberServiceTest {
             memberService.signUp(new SignUpParam(email, password, nickname));
 
             // when
-            Executable login = () -> memberService.login(new LoginDto("not_exist_id", password));
+            Executable login = () -> memberService.login(new LoginParam("not_exist_id", password));
 
             // then
             MyBoxException e = Assertions.assertThrows(MyBoxException.class, login);
@@ -98,7 +98,7 @@ class MemberServiceTest {
             memberService.signUp(new SignUpParam(email, password, nickname));
 
             // when
-            Executable login = () -> memberService.login(new LoginDto(email, "invalid_password"));
+            Executable login = () -> memberService.login(new LoginParam(email, "invalid_password"));
 
             // then
             MyBoxException e = Assertions.assertThrows(MyBoxException.class, login);

@@ -2,7 +2,7 @@ package jaeseok.numble.mybox.member.controller;
 
 import com.google.gson.Gson;
 import jaeseok.numble.mybox.common.response.MyBoxResponse;
-import jaeseok.numble.mybox.member.dto.LoginDto;
+import jaeseok.numble.mybox.member.dto.LoginParam;
 import jaeseok.numble.mybox.member.dto.SignUpParam;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -62,8 +62,8 @@ class MemberControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse();
 
-        LoginDto loginDto = new LoginDto("test_id3", "password");
-        String signInBody = gson.toJson(loginDto);
+        LoginParam loginParam = new LoginParam("test_id3", "password");
+        String signInBody = gson.toJson(loginParam);
 
         // when
         MockHttpServletResponse response = mockMvc

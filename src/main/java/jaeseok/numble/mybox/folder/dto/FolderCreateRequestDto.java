@@ -12,4 +12,8 @@ import lombok.Setter;
 public class FolderCreateRequestDto {
     private Long parentId;
     private String folderName;
+
+    public FolderCreateRequestDto(String folderName) {
+        this.folderName = folderName;
+    }
 }
