@@ -2,7 +2,7 @@ package jaeseok.numble.mybox.member.controller;
 
 import jaeseok.numble.mybox.common.response.MyBoxResponse;
 import jaeseok.numble.mybox.member.dto.LoginDto;
-import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
+import jaeseok.numble.mybox.member.dto.SignUpParam;
 import jaeseok.numble.mybox.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/v1/members")
-    public ResponseEntity signUp(@RequestBody MemberSignUpDto memberSignUpDto) {
+    public ResponseEntity signUp(@RequestBody SignUpParam memberSignUpDto) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(memberService.signUp(memberSignUpDto));
         return ResponseEntity.ok(myBoxResponse);
     }

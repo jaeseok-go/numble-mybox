@@ -5,10 +5,7 @@ import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.member.domain.Member;
-import jaeseok.numble.mybox.member.dto.LoginDto;
-import jaeseok.numble.mybox.member.dto.MemberSignUpDto;
-import jaeseok.numble.mybox.member.dto.UsageDto;
-import jaeseok.numble.mybox.member.dto.MemberInfoDto;
+import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
 import jaeseok.numble.mybox.common.util.ByteConvertor;
 import lombok.RequiredArgsConstructor;
@@ -24,20 +21,20 @@ public class MemberService {
     private final JwtHandler jwtHandler;
     private final FileService fileService;
 
-    public String signUp(MemberSignUpDto memberSignUpDto) {
-        Optional<Member> memberOptional = memberRepository.findById(memberSignUpDto.getId());
+    public SignUpResponse signUp(SignUpParam signUpParam) {
+        Optional<Member> memberOptional = memberRepository.findByEmail(signUpParam.getEmail());
 
         if (memberOptional.isPresent()) {
             throw new MyBoxException(ResponseCode.MEMBER_EXIST);
         }
 
         Member member = memberRepository.save(Member.builder()
-                .id(memberSignUpDto.getId())
-                .password(memberSignUpDto.getPassword())
-                .nickname(memberSignUpDto.getNickname())
+                .email(signUpParam.getEmail())
+                .password(signUpParam.getPassword())
+                .nickname(signUpParam.getNickname())
                 .build());
 
-        return member.getId();
+        return new SignUpResponse(member.getId(), member.getEmail());
     }
 
     public String login(LoginDto loginDto) {
@@ -58,7 +55,7 @@ public class MemberService {
         Long usage = fileService.calculateUsageToByte(id);
 
         return MemberInfoDto.builder()
-                .id(member.getId())
+                .id(member.getEmail())
                 .nickname(member.getNickname())
                 .usage(UsageDto.builder()
                         .B(usage)
