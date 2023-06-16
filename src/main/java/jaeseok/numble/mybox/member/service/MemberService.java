@@ -3,8 +3,6 @@ package jaeseok.numble.mybox.member.service;
 import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import jaeseok.numble.mybox.file.service.FileService;
-import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
@@ -13,16 +11,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLOutput;
 import java.util.Optional;
-
 
 @RequiredArgsConstructor
 @Service
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final FolderService folderService;
     private final JwtHandler jwtHandler;
-    private final FileService fileService;
 
     @Transactional
     public SignUpResponse signUp(SignUpParam signUpParam) {
@@ -57,15 +53,15 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
-        Long usage = fileService.calculateUsageToByte(id);
+        Long bytes = member.calculateUsage();
 
         return MemberInfoResponse.builder()
                 .email(member.getEmail())
                 .usage(UsageDto.builder()
-                        .B(usage)
-                        .KB(ByteConvertor.toKiloBytes(usage))
-                        .MB(ByteConvertor.toMegaBytes(usage))
-                        .GB(ByteConvertor.toGigaBytes(usage))
+                        .B(bytes)
+                        .KB(ByteConvertor.toKiloBytes(bytes))
+                        .MB(ByteConvertor.toMegaBytes(bytes))
+                        .GB(ByteConvertor.toGigaBytes(bytes))
                         .build())
                 .build();
     }

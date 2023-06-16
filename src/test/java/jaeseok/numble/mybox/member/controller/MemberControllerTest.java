@@ -30,7 +30,7 @@ class MemberControllerTest {
     @DisplayName("회원가입 API 성공")
     void signUpSuccess() throws Exception {
         // given
-        SignUpParam signUpInfo = new SignUpParam("test_id2", "password", "test_nickname");
+        SignUpParam signUpInfo = new SignUpParam("test_id2", "password");
         Gson gson = new Gson();
         String body = gson.toJson(signUpInfo);
 
@@ -51,7 +51,7 @@ class MemberControllerTest {
     @DisplayName("회원 로그인 성공")
     void loginSuccess() throws Exception {
         // given
-        SignUpParam signUpInfo = new SignUpParam("test_id3", "password", "test_nickname");
+        SignUpParam signUpInfo = new SignUpParam("test_id3", "password");
         Gson gson = new Gson();
         String signUpBody = gson.toJson(signUpInfo);
 
