@@ -1,7 +1,6 @@
 package jaeseok.numble.mybox.member.service;
 
 import jaeseok.numble.mybox.common.auth.JwtHandler;
-import jaeseok.numble.mybox.common.auth.SimpleJwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.member.domain.Member;
@@ -18,13 +17,12 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpServletRequest;
 
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
-@DisplayName("MemberService Class")
+@DisplayName("MemberServiceTest")
 @WebMvcTest(MemberService.class)
 class MemberServiceTest {
 
