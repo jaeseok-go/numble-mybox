@@ -47,9 +47,13 @@ public class Member extends BaseEntity {
 
     public void createRootFolder() {
         folders.add(Folder.builder()
-                .name("/")
+                .name("")
                 .owner(this)
                 .build());
+    }
+
+    public Long calculateUsage() {
+        return files.stream().mapToLong(File::getSize).sum();
     }
 
     public void validatePassword(String password) {

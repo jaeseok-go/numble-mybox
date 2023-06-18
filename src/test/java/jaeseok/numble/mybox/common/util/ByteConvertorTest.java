@@ -1,12 +1,10 @@
 package jaeseok.numble.mybox.common.util;
 
-import jaeseok.numble.mybox.common.util.ByteConvertor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@DisplayName("ByteConvertorTest")
 class ByteConvertorTest {
 
     // 소숫점아래 6자리까지 동일하면 성공으로 본다
