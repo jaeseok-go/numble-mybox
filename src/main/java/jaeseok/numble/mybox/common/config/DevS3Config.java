@@ -12,7 +12,7 @@ import java.io.IOException;
 public class DevS3Config {
 
     @Bean
-    public StorageHandler testStorageHandler() {
+    public StorageHandler storageHandler() {
         return new StorageHandler() {
             @Override
             public String upload(MultipartFile file, String path) throws IOException {
