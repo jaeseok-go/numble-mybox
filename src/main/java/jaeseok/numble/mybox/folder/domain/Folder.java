@@ -15,7 +15,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Getter
 @SuperBuilder
 @NoArgsConstructor
@@ -61,5 +60,12 @@ public class Folder extends Element {
         if (!memberId.equals(getOwner().getId())) {
             throw new MyBoxException(ResponseCode.INVALID_TOKEN);
         }
+    }
+
+    public String getCurrentPath() {
+        Folder parent = super.getParent();
+        return parent == null ?
+                "/" :
+                parent.getCurrentPath() + "/" + this.getName();
     }
 }

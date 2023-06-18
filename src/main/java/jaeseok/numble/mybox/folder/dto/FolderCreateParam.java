@@ -12,8 +12,4 @@ import lombok.Setter;
 public class FolderCreateParam {
     private Long parentId;
     private String folderName;
-
-    public FolderCreateParam(String folderName) {
-        this.folderName = folderName;
-    }
 }

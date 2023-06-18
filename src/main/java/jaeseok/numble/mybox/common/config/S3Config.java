@@ -10,19 +10,24 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
+@Profile("prd")
 @Configuration
 public class S3Config {
+    @Value("${cloud.aws.credentials.access-key}")
+    private String accessKey;
 
-    @Profile("prd")
+    @Value("${cloud.aws.credentials.secret-key}")
+    private String secretKey;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+
     @Bean
-    public StorageHandler storageHandler(@Value("${cloud.aws.credentials.access-key}") String accessKey,
-                                         @Value("${cloud.aws.credentials.secret-key}") String secretKey,
-                                         @Value("${cloud.aws.region.static}") String region,
-                                         @Value("${cloud.aws.s3.bucket}") String bucket) {
+    public StorageHandler storageHandler() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         AmazonS3Client amazonS3Client =  (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withRegion(region)
@@ -30,16 +35,5 @@ public class S3Config {
                 .build();
 
         return new AmazonS3StorageHandler(amazonS3Client, bucket);
-    }
-
-    @Profile("dev")
-    @Bean
-    public StorageHandler storageHandler() {
-        return new StorageHandler() {
-            @Override
-            public String upload(MultipartFile file, String path) throws IOException {
-                return "";
-            }
-        };
     }
 }

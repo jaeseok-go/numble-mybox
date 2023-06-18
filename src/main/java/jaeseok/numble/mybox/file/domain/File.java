@@ -10,8 +10,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
-import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FILE_SEPARATOR;
-
 @Getter
 @SuperBuilder
 @NoArgsConstructor
@@ -29,6 +27,6 @@ public class File extends Element {
     private Member owner;
 
     public String getCurrentPath() {
-        return this.getParentPath() + FILE_SEPARATOR + this.getName();
+        return super.getParent().getCurrentPath() + "/" + this.getName();
     }
 }
