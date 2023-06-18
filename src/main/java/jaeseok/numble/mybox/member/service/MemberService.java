@@ -39,12 +39,12 @@ public class MemberService {
     }
 
     public String login(LoginParam loginParam) {
-        Member member = memberRepository.findById(loginParam.getId())
+        Member member = memberRepository.findByEmail(loginParam.getEmail())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
         member.validatePassword(loginParam.getPassword());
 
-        return jwtHandler.create(loginParam.getId());
+        return jwtHandler.create(String.valueOf(member.getId()));
     }
 
     public MemberInfoResponse retrieveMember() {

@@ -10,6 +10,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginParam {
-    private String id;
+    private String email;
     private String password;
 }

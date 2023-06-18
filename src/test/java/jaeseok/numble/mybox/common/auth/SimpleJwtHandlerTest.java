@@ -6,16 +6,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-@Transactional
 @DisplayName("SimpleJwtHandler Class")
-@SpringBootTest
+@WebMvcTest(SimpleJwtHandler.class)
 class SimpleJwtHandlerTest {
 
     @Autowired
-    private JwtHandler jwtHandler;
+    private SimpleJwtHandler jwtHandler;
 
     @Nested
     @DisplayName("jwt 생성")
