@@ -9,11 +9,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class FolderCreateRequestDto {
+public class FolderCreateParam {
     private Long parentId;
     private String folderName;
 
-    public FolderCreateRequestDto(String folderName) {
+    public FolderCreateParam(String folderName) {
         this.folderName = folderName;
     }
 }

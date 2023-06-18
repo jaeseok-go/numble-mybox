@@ -5,15 +5,10 @@ import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
-import jaeseok.numble.mybox.folder.dto.FolderCreateRequestDto;
+import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
-import jaeseok.numble.mybox.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,50 +20,15 @@ public class FolderService {
 
     private final JwtHandler jwtHandler;
 
-    public Long create(FolderCreateRequestDto folderCreateRequestDto) {
-        Folder parent = folderRepository.findById(folderCreateRequestDto.getParentId())
+    public Long create(FolderCreateParam folderCreateParam) {
+        Folder parent = folderRepository.findById(folderCreateParam.getParentId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
-        String folderName = folderCreateRequestDto.getFolderName();
-
-        return folderRepository.save(Folder.builder()
-                .parentPath(parent.getCurrentPath())
-                .name(folderName)
-                .parent(parent)
-                .owner(parent.getOwner())
-                .createdAt(LocalDateTime.now())
-                .build()).getId();
-    }
-
-    public Long createRoot(Member member) {
-        Folder root = folderRepository.save(Folder.builder()
-                .owner(member)
-                .build());
-
-        return root.getId();
+        Folder child = parent.addFolder(folderCreateParam.getFolderName());
+        return child.getId();
     }
 
     public Integer delete(Long id) {
-        Folder folder = folderRepository.findById(id)
-                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
-
-        String memberId = jwtHandler.getId();
-        folder.validateOwner(memberId);
-
-        int deleteCount = 0;
-        List<Folder> targets = folderRepository
-                .findByOwnerAndParentPathStartsWithOrderByParentPathDesc(memberId, folder.getCurrentPath());
-        for(Folder target : targets) {
-            fileService.deleteChild(target);
-            deleteCount++;
-            try {
-                folderRepository.deleteById(target.getId());
-                deleteCount++;
-            } catch (Exception e) {
-                throw new MyBoxException(ResponseCode.FOLDER_DELETE_FAIL, target.getCurrentPath());
-            }
-        }
-
-        return deleteCount;
+        return 0;
     }
 }
