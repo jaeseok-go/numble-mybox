@@ -13,7 +13,8 @@ public enum ResponseCode {
     FILE_DELETE_FAIL("FILE0002", "Fail to delete file under []."),
     PARENT_NOT_FOUND("FLDR0001", "Parent folder is not found."),
     FOLDER_NOT_FOUND("FLDR0002", "Folder is not found."),
-    FOLDER_DELETE_FAIL("FLDR0003", "Fail to delete [] folder.");
+    FOLDER_DELETE_FAIL("FLDR0003", "Fail to delete [] folder."),
+    FOLDER_NAME_EXIST("FLDR0004", "The folder name is already exist.");
 
     private final String code;
     private final String message;

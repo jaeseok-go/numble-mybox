@@ -1,7 +1,7 @@
 package jaeseok.numble.mybox.folder.controller;
 
 import jaeseok.numble.mybox.common.response.MyBoxResponse;
-import jaeseok.numble.mybox.folder.dto.FolderCreateRequestDto;
+import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.service.FolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public class FolderController {
     private final FolderService folderService;
 
     @PostMapping("/v1/folder")
-    public ResponseEntity createFolder(@RequestBody FolderCreateRequestDto folderCreateRequestDto) {
-        MyBoxResponse myBoxResponse = new MyBoxResponse(folderService.create(folderCreateRequestDto));
+    public ResponseEntity createFolder(@RequestBody FolderCreateParam folderCreateParam) {
+        MyBoxResponse myBoxResponse = new MyBoxResponse(folderService.create(folderCreateParam));
         return ResponseEntity.ok(myBoxResponse);
     }
 

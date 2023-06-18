@@ -9,14 +9,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static jaeseok.numble.mybox.common.constant.MyBoxConstant.FOLDER_SEPARATOR;
 
 @Getter
 @SuperBuilder
@@ -38,13 +35,37 @@ public class Folder extends Element {
     @OneToMany(mappedBy = "parent")
     private List<File> childFiles = new ArrayList<>();
 
-    public String getCurrentPath() {
-        return this.getParentPath() + FOLDER_SEPARATOR + this.getName();
+    public Folder addFolder(String name) {
+        validateFolderName(name);
+
+        Folder child = Folder.builder()
+                .name(name)
+                .parent(this)
+                .owner(owner)
+                .build();
+
+        childFolders.add(child);
+        return child;
+    }
+
+    public void validateFolderName(String name) {
+        for (Folder folder : childFolders) {
+            if (name.equals(folder.getName())) {
+                throw new MyBoxException(ResponseCode.FOLDER_NAME_EXIST);
+            }
+        }
     }
 
     public void validateOwner(String memberId) {
         if (!memberId.equals(getOwner().getId())) {
             throw new MyBoxException(ResponseCode.INVALID_TOKEN);
         }
+    }
+
+    public String getCurrentPath() {
+        Folder parent = super.getParent();
+        return parent == null ?
+                "/" :
+                parent.getCurrentPath() + "/" + this.getName();
     }
 }

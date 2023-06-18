@@ -14,26 +14,19 @@ import org.springframework.context.annotation.Profile;
 @Profile("prd")
 @Configuration
 public class S3Config {
-    @Value("${cloud.aws.credentials.access-key}")
-    private String accessKey;
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String secretKey;
-    @Value("${cloud.aws.region.static}")
-    private String region;
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
 
     @Bean
-    public AmazonS3Client amazonS3Client() {
+    public StorageHandler storageHandler(
+            @Value("${cloud.aws.credentials.access-key}") String accessKey,
+            @Value("${cloud.aws.credentials.secret-key}") String secretKey,
+            @Value("${cloud.aws.region.static}") String region,
+            @Value("${cloud.aws.s3.bucket}") String bucket) {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
+        AmazonS3Client amazonS3Client =  (AmazonS3Client) AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
-    }
 
-    @Bean
-    public StorageHandler storageHandler() {
-        return new AmazonS3StorageHandler(amazonS3Client(), bucket);
+        return new AmazonS3StorageHandler(amazonS3Client, bucket);
     }
 }

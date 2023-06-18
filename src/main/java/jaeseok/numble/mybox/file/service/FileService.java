@@ -34,7 +34,6 @@ public class FileService {
                 .name(file.getName())
                 .size(file.getSize())
                 .owner(parent.getOwner())
-                .parentPath(parent.getCurrentPath())
                 .build());
 
         try {
@@ -57,7 +56,7 @@ public class FileService {
         try {
             return fileRepository.deleteByParent(folder.getId());
         } catch (Exception e) {
-            throw new MyBoxException(ResponseCode.FILE_DELETE_FAIL, folder.getCurrentPath());
+            throw new MyBoxException(ResponseCode.FILE_DELETE_FAIL, folder.getName());
         }
     }
 }
