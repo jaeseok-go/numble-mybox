@@ -28,11 +28,11 @@ public class Folder extends Element {
     private Member owner;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Folder> childFolders = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<File> childFiles = new ArrayList<>();
 
     public Folder addFolder(String name) {
@@ -67,5 +67,14 @@ public class Folder extends Element {
         return parent == null ?
                 "/" :
                 parent.getCurrentPath() + "/" + this.getName();
+    }
+
+    public Integer countTotalElement() {
+        int currentFolderCount = 1;
+        int folderCount = childFolders.stream().mapToInt(Folder::countTotalElement).sum();
+        int fileCount = childFiles.size();
+
+        return currentFolderCount + folderCount +fileCount;
+
     }
 }
