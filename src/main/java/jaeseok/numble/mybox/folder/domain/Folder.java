@@ -73,7 +73,7 @@ public class Folder extends Element {
         int currentFolderCount = 1;
         int folderCount = childFolders.stream().mapToInt(Folder::countTotalElement).sum();
         int fileCount = childFiles.size();
-        
+
         return currentFolderCount + folderCount +fileCount;
 
     }

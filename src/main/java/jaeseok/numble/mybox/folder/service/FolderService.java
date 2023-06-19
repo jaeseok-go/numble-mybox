@@ -5,6 +5,7 @@ import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.dto.FolderCreateResponse;
+import jaeseok.numble.mybox.folder.dto.FolderRetrieveResponse;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,12 @@ public class FolderService {
         folderRepository.delete(folder);
 
         return deleteCount;
+    }
+
+    public FolderRetrieveResponse retrieveFolder(Long id) {
+        Folder folder = folderRepository.findById(id)
+                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
+
+        return new FolderRetrieveResponse(folder);
     }
 }

@@ -20,9 +20,15 @@ public class FolderController {
         return ResponseEntity.ok(myBoxResponse);
     }
 
-    @DeleteMapping("/v1/folder/{jd}")
+    @DeleteMapping("/v1/folder/{id}")
     public ResponseEntity deleteFolder(@PathVariable Long id) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(folderService.delete(id));
+        return ResponseEntity.ok(myBoxResponse);
+    }
+
+    @GetMapping("/v1/folder/{id}")
+    public ResponseEntity retrieveFolder(@PathVariable Long id) {
+        MyBoxResponse myBoxResponse = new MyBoxResponse(folderService.retrieveFolder(id));
         return ResponseEntity.ok(myBoxResponse);
     }
 }
