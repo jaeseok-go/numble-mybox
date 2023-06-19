@@ -25,6 +25,13 @@ public class FolderService {
     }
 
     public Integer delete(Long id) {
-        return 0;
+        Folder folder = folderRepository.findById(id)
+                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
+
+        int deleteCount = folder.countTotalElement();
+
+        folderRepository.delete(folder);
+
+        return deleteCount;
     }
 }
