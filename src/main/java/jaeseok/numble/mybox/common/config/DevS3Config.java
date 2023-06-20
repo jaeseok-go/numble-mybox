@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+
 @Profile("dev")
 @Configuration
 public class DevS3Config {
@@ -17,6 +19,11 @@ public class DevS3Config {
             @Override
             public String upload(MultipartFile file, String path) throws IOException {
                 return "";
+            }
+
+            @Override
+            public int deleteAll(List<Long> keys) {
+                return 0;
             }
         };
     }

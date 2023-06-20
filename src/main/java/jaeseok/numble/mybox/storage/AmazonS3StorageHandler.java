@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class AmazonS3StorageHandler implements StorageHandler {
@@ -22,5 +23,9 @@ public class AmazonS3StorageHandler implements StorageHandler {
         amazonS3Client.putObject(bucket, path, file.getInputStream(), metadata);
 
         return "https://" + bucket + path;
+    }
+
+    public int deleteAll(List<Long> keys) {
+        return 0;
     }
 }

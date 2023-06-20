@@ -5,6 +5,7 @@ import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.file.repository.FileRepository;
+import jaeseok.numble.mybox.folder.domain.Element;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.storage.StorageHandler;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -43,6 +46,16 @@ public class FileService {
         }
 
         return uploadedFile.getId();
+    }
+
+    public Integer deleteAll(List<File> files) {
+        int deleteCount = storageHandler.deleteAll(files.stream()
+                .map(Element::getId)
+                .collect(Collectors.toList()));
+
+        fileRepository.deleteAll(files);
+
+        return deleteCount;
     }
 
     public Long calculateUsageToByte(String memberId) {

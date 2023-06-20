@@ -69,12 +69,17 @@ public class Folder extends Element {
                 parent.getCurrentPath() + "/" + this.getName();
     }
 
-    public Integer countTotalElement() {
-        int currentFolderCount = 1;
-        int folderCount = childFolders.stream().mapToInt(Folder::countTotalElement).sum();
-        int fileCount = childFiles.size();
+    public List<File> getAllChildFiles() {
+        return addAllChildFiles(new ArrayList<>());
+    }
 
-        return currentFolderCount + folderCount +fileCount;
+    public List<File> addAllChildFiles(List<File> files) {
+        files.addAll(childFiles);
 
+        for (Folder folder : childFolders) {
+            folder.addAllChildFiles(files);
+        }
+
+        return files;
     }
 }
