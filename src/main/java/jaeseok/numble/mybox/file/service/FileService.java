@@ -8,6 +8,7 @@ import jaeseok.numble.mybox.file.repository.FileRepository;
 import jaeseok.numble.mybox.folder.domain.Element;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
+import jaeseok.numble.mybox.storage.FileKey;
 import jaeseok.numble.mybox.storage.StorageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class FileService {
                 .build());
 
         try {
-            storageHandler.upload(file, uploadedFile.getCurrentPath());
+            storageHandler.upload(file, new FileKey(uploadedFile.getCurrentPath()));
         } catch (IOException e) {
             throw new MyBoxException(ResponseCode.FILE_UPLOAD_FAIL);
         }
@@ -51,15 +52,12 @@ public class FileService {
     public Integer deleteAll(List<File> files) {
         int deleteCount = storageHandler.deleteAll(files.stream()
                 .map(Element::getId)
+                .map(FileKey::new)
                 .collect(Collectors.toList()));
 
         fileRepository.deleteAll(files);
 
         return deleteCount;
-    }
-
-    public Long calculateUsageToByte(String memberId) {
-        return fileRepository.sumSizeByOwnerId(memberId);
     }
 
     public Long deleteChild(Folder folder) {
