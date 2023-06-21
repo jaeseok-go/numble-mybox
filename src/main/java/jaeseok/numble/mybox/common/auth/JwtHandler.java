@@ -1,11 +1,11 @@
 package jaeseok.numble.mybox.common.auth;
 
 public interface JwtHandler {
-    String create(String id);
+    String create(Long id);
 
-    String getId(String jwt);
+    Long getId(String jwt);
 
-    String getId();
+    Long getId();
 
     Boolean validate(String jwt);
 }

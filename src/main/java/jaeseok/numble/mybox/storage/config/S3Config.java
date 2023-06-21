@@ -1,4 +1,4 @@
-package jaeseok.numble.mybox.common.config;
+package jaeseok.numble.mybox.storage.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

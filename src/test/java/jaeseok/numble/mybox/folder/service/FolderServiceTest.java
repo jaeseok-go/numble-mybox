@@ -1,6 +1,7 @@
 package jaeseok.numble.mybox.folder.service;
 
 import jaeseok.numble.mybox.common.auth.JwtHandler;
+import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.dto.FolderCreateResponse;
@@ -27,6 +28,9 @@ class FolderServiceTest {
 
     @MockBean
     private FolderRepository folderRepository;
+
+    @MockBean
+    private FileService fileService;
 
     @MockBean
     private JwtHandler jwtHandler;
