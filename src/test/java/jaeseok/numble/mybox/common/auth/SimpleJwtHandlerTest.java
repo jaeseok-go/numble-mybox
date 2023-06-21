@@ -22,7 +22,7 @@ class SimpleJwtHandlerTest {
         @DisplayName("성공")
         void success() {
             // given
-            String id = "test_id";
+            Long id = 1L;
 
             // when
             String jwt = jwtHandler.create(id);
@@ -40,11 +40,11 @@ class SimpleJwtHandlerTest {
         @DisplayName("성공")
         void success() {
             // given
-            String inputId = "test_id";
+            Long inputId = 1L;
 
             // when
             String jwt = jwtHandler.create(inputId);
-            String outputId = jwtHandler.getId(jwt);
+            Long outputId = jwtHandler.getId(jwt);
 
             // then
             Assertions.assertEquals(inputId, outputId);
@@ -71,7 +71,7 @@ class SimpleJwtHandlerTest {
         @DisplayName("성공")
         void success() {
             // given
-            String id = "test_id";
+            Long id = 1L;
 
             // when
             String jwt = jwtHandler.create(id);

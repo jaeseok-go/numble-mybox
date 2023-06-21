@@ -60,14 +60,17 @@ public class FileService {
         return deleteCount;
     }
 
-    public Long deleteChild(Folder folder) {
-        String memberId = jwtHandler.getId();
-        folder.validateOwner(memberId);
 
-        try {
-            return fileRepository.deleteByParent(folder.getId());
-        } catch (Exception e) {
-            throw new MyBoxException(ResponseCode.FILE_DELETE_FAIL, folder.getName());
-        }
+    /*
+     * SELECT *
+     * FROM element
+     * WHERE dtype = 'FILE'
+     * AND member_id = :memberId
+     * AND parent_id = null;
+     * */
+    public Folder retrieveRootFolder() {
+        Long memberId = jwtHandler.getId();
+
+        return Folder.builder().id(1L).build();
     }
 }

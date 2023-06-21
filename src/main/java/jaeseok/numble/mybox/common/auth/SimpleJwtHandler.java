@@ -25,37 +25,39 @@ public class SimpleJwtHandler implements JwtHandler{
     Integer validTime;
 
     @Override
-    public String create(String id) {
+    public String create(Long id) {
         Date current = new Date();
         Date expired = new Date(current.getTime() + validTime);
         Key key = Keys.hmacShaKeyFor(issueKey.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS512)
-                .claim("id", id)
+                .claim("id", String.valueOf(id))
                 .setIssuedAt(current)
                 .setExpiration(expired)
                 .compact();
     }
 
     @Override
-    public String getId(String jwt) {
-        return Jwts.parserBuilder()
+    public Long getId(String jwt) {
+        String idString = Jwts.parserBuilder()
                 .setSigningKey(Base64.getEncoder().encodeToString(issueKey.getBytes()))
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody().get("id").toString();
+        System.out.println(idString + " ==================================== ");
+        return Long.parseLong(idString);
     }
 
     @Override
-    public String getId() {
+    public Long getId() {
         return getId(request.getHeader("Authorization"));
     }
 
     @Override
     public Boolean validate(String jwt) {
         try {
-            return !getId(jwt).isBlank();
+            return getId(jwt) instanceof Number;
         } catch (Exception e) {
             return false;
         }

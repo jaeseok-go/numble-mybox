@@ -3,6 +3,7 @@ package jaeseok.numble.mybox.member.service;
 import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
+import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLOutput;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -19,6 +19,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtHandler jwtHandler;
+    private final FileService fileService;
 
     @Transactional
     public SignUpResponse signUp(SignUpParam signUpParam) {
@@ -38,17 +39,21 @@ public class MemberService {
         return new SignUpResponse(member.getId(), member.getEmail());
     }
 
-    public String login(LoginParam loginParam) {
+    public LoginResponse login(LoginParam loginParam) {
         Member member = memberRepository.findByEmail(loginParam.getEmail())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
         member.validatePassword(loginParam.getPassword());
 
-        return jwtHandler.create(String.valueOf(member.getId()));
+        String jwt = jwtHandler.create(member.getId());
+        // Long rootFolderId = fileService.retrieveRootFolder().getId();
+        Long rootFolderId = 1L;
+
+        return new LoginResponse(jwt, rootFolderId);
     }
 
     public MemberInfoResponse retrieveMember() {
-        String id = jwtHandler.getId();
+        Long id = jwtHandler.getId();
 
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));

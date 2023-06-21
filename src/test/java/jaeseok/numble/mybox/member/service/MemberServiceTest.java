@@ -3,8 +3,10 @@ package jaeseok.numble.mybox.member.service;
 import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
+import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.LoginParam;
+import jaeseok.numble.mybox.member.dto.LoginResponse;
 import jaeseok.numble.mybox.member.dto.SignUpParam;
 import jaeseok.numble.mybox.member.dto.SignUpResponse;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
@@ -34,6 +36,9 @@ class MemberServiceTest {
 
     @MockBean
     private JwtHandler jwtHandler;
+
+    @MockBean
+    private FileService fileService;
 
     private String email = "test_id";
     private String password = "1234";
@@ -94,15 +99,19 @@ class MemberServiceTest {
             // given
             String sampleJwt = "eyJhbGciOiJIUzUxMiJ9.eyJpZCI6InRlc3RfaWQiLCJpYXQiOjE2ODcwNzA4MDAsImV4cCI6MTY4NzA3MTQwMH0.Gl9K4kut43SHm0F66PKZAdJFnQa3kBOlEu57nEegP33VhuoQ1tuDoGlvL7k8blcd816fWmhMRT8i14Gx_UTzGA";
             BDDMockito.given(memberRepository.findByEmail(email)).willReturn(Optional.of(loginMember));
-            BDDMockito.given(jwtHandler.create(any(String.class))).willReturn(sampleJwt);
+            BDDMockito.given(jwtHandler.create(any(Long.class))).willReturn(sampleJwt);
 
             // when
-            String jwt = memberService.login(loginParam);
-            System.out.println(jwt);
+            LoginResponse response = memberService.login(loginParam);
+            String jwt = response.getJwt();
+            Long rootFolderId = response.getRootFolderId();
 
             // then
             Assertions.assertTrue(jwt instanceof String);
             Assertions.assertTrue(jwt.contains("."));
+
+            Assertions.assertTrue(rootFolderId instanceof Long);
+            Assertions.assertTrue(rootFolderId > 0L);
         }
 
         @Test

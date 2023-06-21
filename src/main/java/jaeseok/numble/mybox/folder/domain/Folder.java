@@ -56,7 +56,7 @@ public class Folder extends Element {
         }
     }
 
-    public void validateOwner(String memberId) {
+    public void validateOwner(Long memberId) {
         if (!memberId.equals(getOwner().getId())) {
             throw new MyBoxException(ResponseCode.INVALID_TOKEN);
         }
