@@ -46,8 +46,7 @@ public class MemberService {
         member.validatePassword(loginParam.getPassword());
 
         String jwt = jwtHandler.create(member.getId());
-        // Long rootFolderId = fileService.retrieveRootFolder().getId();
-        Long rootFolderId = 1L;
+        Long rootFolderId = fileService.retrieveRootFolder().getId();
 
         return new LoginResponse(jwt, rootFolderId);
     }
@@ -58,16 +57,8 @@ public class MemberService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
-        Long bytes = member.calculateUsage();
+        Long byteUsage = member.calculateUsage();
 
-        return MemberInfoResponse.builder()
-                .email(member.getEmail())
-                .usage(UsageDto.builder()
-                        .B(bytes)
-                        .KB(ByteConvertor.toKiloBytes(bytes))
-                        .MB(ByteConvertor.toMegaBytes(bytes))
-                        .GB(ByteConvertor.toGigaBytes(bytes))
-                        .build())
-                .build();
+        return new MemberInfoResponse(member, byteUsage);
     }
 }

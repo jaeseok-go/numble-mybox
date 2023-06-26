@@ -1,5 +1,6 @@
 package jaeseok.numble.mybox.member.dto;
 
+import jaeseok.numble.mybox.member.domain.Member;
 import lombok.*;
 
 @NoArgsConstructor
@@ -10,5 +11,11 @@ import lombok.*;
 public class MemberInfoResponse {
     private Long id;
     private String email;
-    private UsageDto usage;
+    private UsageResponse usage;
+
+    public MemberInfoResponse(Member member, Long byteUsage) {
+        this.id = member.getId();
+        this.email = member.getEmail();
+        this.usage = new UsageResponse(byteUsage);
+    }
  }

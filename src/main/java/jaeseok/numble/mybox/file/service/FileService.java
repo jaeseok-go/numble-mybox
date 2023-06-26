@@ -59,7 +59,7 @@ public class FileService {
 
         return deleteCount;
     }
-    
+
     public Folder retrieveRootFolder() {
         return folderRepository
                 .findFolderByOwnerAndParent(jwtHandler.getId(), null)
