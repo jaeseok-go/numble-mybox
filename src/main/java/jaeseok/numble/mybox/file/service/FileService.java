@@ -60,17 +60,9 @@ public class FileService {
         return deleteCount;
     }
 
-
-    /*
-     * SELECT *
-     * FROM element
-     * WHERE dtype = 'FILE'
-     * AND member_id = :memberId
-     * AND parent_id = null;
-     * */
     public Folder retrieveRootFolder() {
-        Long memberId = jwtHandler.getId();
-
-        return Folder.builder().id(1L).build();
+        return folderRepository
+                .findFolderByOwnerAndParent(jwtHandler.getId(), null)
+                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
     }
 }

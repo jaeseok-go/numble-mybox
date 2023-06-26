@@ -4,6 +4,7 @@ import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.service.FileService;
+import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.LoginParam;
 import jaeseok.numble.mybox.member.dto.LoginResponse;
@@ -98,8 +99,11 @@ class MemberServiceTest {
         void success() {
             // given
             String sampleJwt = "eyJhbGciOiJIUzUxMiJ9.eyJpZCI6InRlc3RfaWQiLCJpYXQiOjE2ODcwNzA4MDAsImV4cCI6MTY4NzA3MTQwMH0.Gl9K4kut43SHm0F66PKZAdJFnQa3kBOlEu57nEegP33VhuoQ1tuDoGlvL7k8blcd816fWmhMRT8i14Gx_UTzGA";
+            Folder rootFolder = Folder.builder().id(1L).parent(null).build();
+
             BDDMockito.given(memberRepository.findByEmail(email)).willReturn(Optional.of(loginMember));
             BDDMockito.given(jwtHandler.create(any(Long.class))).willReturn(sampleJwt);
+            BDDMockito.given(fileService.retrieveRootFolder()).willReturn(rootFolder);
 
             // when
             LoginResponse response = memberService.login(loginParam);
