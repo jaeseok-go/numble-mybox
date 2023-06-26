@@ -3,6 +3,8 @@ package jaeseok.numble.mybox.folder.repository;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FolderRepository extends JpaRepository<Folder, Long> {
+import java.util.Optional;
 
+public interface FolderRepository extends JpaRepository<Folder, Long> {
+    Optional<Folder> findFolderByOwnerAndParent(Long ownerId, Long parentId);
 }
