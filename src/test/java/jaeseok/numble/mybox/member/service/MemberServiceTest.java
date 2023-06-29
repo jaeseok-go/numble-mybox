@@ -5,6 +5,7 @@ import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
+import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.LoginParam;
 import jaeseok.numble.mybox.member.dto.LoginResponse;
@@ -39,7 +40,7 @@ class MemberServiceTest {
     private JwtHandler jwtHandler;
 
     @MockBean
-    private FileService fileService;
+    private FolderService folderService;
 
     private String email = "test_id";
     private String password = "1234";
@@ -103,7 +104,7 @@ class MemberServiceTest {
 
             BDDMockito.given(memberRepository.findByEmail(email)).willReturn(Optional.of(loginMember));
             BDDMockito.given(jwtHandler.create(any(Long.class))).willReturn(sampleJwt);
-            BDDMockito.given(fileService.retrieveRootFolder()).willReturn(rootFolder);
+            BDDMockito.given(folderService.retrieveRootFolder(any(Member.class))).willReturn(rootFolder);
 
             // when
             LoginResponse response = memberService.login(loginParam);

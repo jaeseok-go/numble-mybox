@@ -60,9 +60,4 @@ public class FileService {
         return deleteCount;
     }
 
-    public Folder retrieveRootFolder() {
-        return folderRepository
-                .findFolderByOwnerAndParent(jwtHandler.getId(), null)
-                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
-    }
 }

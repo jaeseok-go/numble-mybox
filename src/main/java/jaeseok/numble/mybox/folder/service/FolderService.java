@@ -8,6 +8,7 @@ import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.dto.FolderCreateResponse;
 import jaeseok.numble.mybox.folder.dto.FolderRetrieveResponse;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
+import jaeseok.numble.mybox.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,12 @@ public class FolderService {
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
 
         return new FolderRetrieveResponse(folder);
+    }
+
+
+    public Folder retrieveRootFolder(Member member) {
+        return folderRepository
+                .findFolderByOwnerAndParent(member.getId(), null)
+                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
     }
 }
