@@ -3,11 +3,11 @@ package jaeseok.numble.mybox.member.service;
 import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import jaeseok.numble.mybox.file.service.FileService;
+import jaeseok.numble.mybox.folder.domain.Folder;
+import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
-import jaeseok.numble.mybox.common.util.ByteConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtHandler jwtHandler;
-    private final FileService fileService;
+    private final FolderService folderService;
 
     @Transactional
     public SignUpResponse signUp(SignUpParam signUpParam) {
@@ -46,9 +46,9 @@ public class MemberService {
         member.validatePassword(loginParam.getPassword());
 
         String jwt = jwtHandler.create(member.getId());
-        Long rootFolderId = fileService.retrieveRootFolder().getId();
+        Folder rootFolder = folderService.retrieveRootFolder(member);
 
-        return new LoginResponse(jwt, rootFolderId);
+        return new LoginResponse(jwt, rootFolder.getId());
     }
 
     public MemberInfoResponse retrieveMember() {

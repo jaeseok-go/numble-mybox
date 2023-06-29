@@ -1,13 +1,12 @@
 package jaeseok.numble.mybox.storage;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest;
-import com.amazonaws.services.s3.model.DeleteObjectsResult;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +23,13 @@ public class AmazonS3StorageHandler implements StorageHandler {
         amazonS3Client.putObject(bucket, fileKey.getKey(), file.getInputStream(), metadata);
 
         return "https://" + bucket + fileKey.getKey();
+    }
+
+    @Override
+    public InputStream download(FileKey fileKey) {
+        return amazonS3Client
+                .getObject(new GetObjectRequest(bucket, fileKey.getKey()))
+                .getObjectContent();
     }
 
     public int deleteAll(List<FileKey> fileKeys) {

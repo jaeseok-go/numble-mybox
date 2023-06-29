@@ -4,6 +4,7 @@ import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.domain.File;
+import jaeseok.numble.mybox.file.dto.FileDownloadResponse;
 import jaeseok.numble.mybox.file.repository.FileRepository;
 import jaeseok.numble.mybox.folder.domain.Element;
 import jaeseok.numble.mybox.folder.domain.Folder;
@@ -11,6 +12,7 @@ import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.storage.FileKey;
 import jaeseok.numble.mybox.storage.StorageHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +51,16 @@ public class FileService {
         return uploadedFile.getId();
     }
 
+    public FileDownloadResponse download(Long fileId) {
+        File file = fileRepository.findById(fileId)
+                .orElseThrow(()-> new MyBoxException(ResponseCode.FILE_NOT_FOUND));
+
+        String fileName = file.getName();
+        InputStreamResource resource = new InputStreamResource(storageHandler.download(new FileKey(file.getCurrentPath())));
+
+        return new FileDownloadResponse(fileName, resource);
+    }
+
     public Integer deleteAll(List<File> files) {
         int deleteCount = storageHandler.deleteAll(files.stream()
                 .map(Element::getId)
@@ -60,9 +72,4 @@ public class FileService {
         return deleteCount;
     }
 
-    public Folder retrieveRootFolder() {
-        return folderRepository
-                .findFolderByOwnerAndParent(jwtHandler.getId(), null)
-                .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
-    }
 }
