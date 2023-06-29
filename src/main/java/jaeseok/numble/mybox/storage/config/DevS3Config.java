@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Profile("dev")
@@ -20,6 +21,11 @@ public class DevS3Config {
 
             @Override
             public String upload(MultipartFile file, FileKey fileKey) throws IOException {
+                return null;
+            }
+
+            @Override
+            public InputStream download(FileKey fileKey) {
                 return null;
             }
 
