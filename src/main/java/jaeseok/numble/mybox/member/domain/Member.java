@@ -1,8 +1,6 @@
 package jaeseok.numble.mybox.member.domain;
 
 import jaeseok.numble.mybox.common.entity.BaseEntity;
-import jaeseok.numble.mybox.common.response.ResponseCode;
-import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import lombok.AllArgsConstructor;
@@ -54,13 +52,11 @@ public class Member extends BaseEntity {
                 .build());
     }
 
-    public Long calculateUsage() {
-        return files.stream().mapToLong(File::getSize).sum();
+    public boolean equalPassword(String password) {
+        return this.password.equals(password);
     }
 
-    public void validatePassword(String password) {
-        if (!password.equals(this.password)) {
-            throw new MyBoxException(ResponseCode.INVALID_PASSWORD);
-        }
+    public Long calculateUsage() {
+        return files.stream().mapToLong(File::getSize).sum();
     }
 }

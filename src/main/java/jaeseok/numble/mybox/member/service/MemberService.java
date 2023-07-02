@@ -23,7 +23,7 @@ public class MemberService {
     public SignUpResponse signUp(SignUpParam signUpParam) {
         String email = signUpParam.getEmail();
 
-        checkDuplicate(email);
+        validateDuplicate(email);
 
         Member joinMember = Member.builder()
                 .email(email)
@@ -40,7 +40,7 @@ public class MemberService {
                 .build();
     }
 
-    private void checkDuplicate(String email) {
+    private void validateDuplicate(String email) {
         if (exist(email)) {
             throw new MyBoxException(ResponseCode.MEMBER_EXIST);
         }
@@ -54,22 +54,29 @@ public class MemberService {
         Member member = memberRepository.findByEmail(loginParam.getEmail())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
-        member.validatePassword(loginParam.getPassword());
+        validatePassword(member, loginParam.getPassword());
 
         String jwt = jwtHandler.create(member.getId());
         Folder rootFolder = folderService.retrieveRootFolder(member);
 
-        return new LoginResponse(jwt, rootFolder.getId(), retrieveMember());
+        return new LoginResponse(jwt, rootFolder.getId(), retrieveMember(member.getId()));
     }
 
-    public MemberInfoResponse retrieveMember() {
-        Long id = jwtHandler.getId();
+    private void validatePassword(Member member, String password) {
+        if (!member.equalPassword(password)) {
+            throw new MyBoxException(ResponseCode.INVALID_PASSWORD);
+        }
+    }
 
-        Member member = memberRepository.findById(id)
+
+    public MemberInfoResponse retrieveMember() {
+        return retrieveMember(jwtHandler.getId());
+    }
+
+    private MemberInfoResponse retrieveMember(Long id) {
+        MemberInfoAndUsage memberInfoAndUsage = memberRepository.findMemberAndUsageById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.MEMBER_NOT_FOUND));
 
-        Long byteUsage = member.calculateUsage();
-
-        return new MemberInfoResponse(member, byteUsage);
+        return new MemberInfoResponse(memberInfoAndUsage);
     }
 }

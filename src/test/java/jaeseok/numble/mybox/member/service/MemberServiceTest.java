@@ -7,10 +7,7 @@ import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
-import jaeseok.numble.mybox.member.dto.LoginParam;
-import jaeseok.numble.mybox.member.dto.LoginResponse;
-import jaeseok.numble.mybox.member.dto.SignUpParam;
-import jaeseok.numble.mybox.member.dto.SignUpResponse;
+import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -94,6 +91,7 @@ class MemberServiceTest {
                 .email(email)
                 .password(password)
                 .build();
+        private MemberInfoAndUsage memberInfoAndUsage = new MemberInfoAndUsage(1L, email, 100L);
 
         @Test
         @DisplayName("성공")
@@ -103,7 +101,7 @@ class MemberServiceTest {
             Folder rootFolder = Folder.builder().id(1L).parent(null).build();
 
             BDDMockito.given(memberRepository.findByEmail(email)).willReturn(Optional.of(loginMember));
-            BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(loginMember));
+            BDDMockito.given(memberRepository.findMemberAndUsageById(any())).willReturn(Optional.of(memberInfoAndUsage));
             BDDMockito.given(jwtHandler.create(any(Long.class))).willReturn(sampleJwt);
             BDDMockito.given(folderService.retrieveRootFolder(any(Member.class))).willReturn(rootFolder);
 

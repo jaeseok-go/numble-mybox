@@ -45,7 +45,7 @@ public class SimpleJwtHandler implements JwtHandler{
                 .build()
                 .parseClaimsJws(jwt)
                 .getBody().get("id").toString();
-        System.out.println(idString + " ==================================== ");
+
         return Long.parseLong(idString);
     }
 
