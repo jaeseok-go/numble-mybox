@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/v1/members")
+    @PostMapping("/v1/member")
     public ResponseEntity signUp(@RequestBody SignUpParam signUpParam) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(memberService.signUp(signUpParam));
         return ResponseEntity.ok(myBoxResponse);

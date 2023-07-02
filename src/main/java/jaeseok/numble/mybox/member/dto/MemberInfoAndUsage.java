@@ -7,7 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SignUpResponse {
+public class MemberInfoAndUsage {
     private Long id;
     private String email;
+    private Long byteUsage;
 }
