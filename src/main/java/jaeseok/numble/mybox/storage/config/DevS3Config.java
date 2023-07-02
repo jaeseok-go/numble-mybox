@@ -30,7 +30,7 @@ public class DevS3Config {
             }
 
             @Override
-            public int deleteAll(List<FileKey> fileKeys) {
+            public int delete(FileKey fileKey) {
                 return 0;
             }
         };

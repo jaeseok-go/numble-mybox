@@ -32,4 +32,10 @@ public class FileController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileDownloadResponse.getName())
                 .body(fileDownloadResponse.getResource());
     }
+
+    @DeleteMapping("/v1/{fileId}")
+    public ResponseEntity delete(@PathVariable Long fileId) {
+        MyBoxResponse myBoxResponse = new MyBoxResponse(fileService.delete(fileId));
+        return ResponseEntity.ok(myBoxResponse);
+    }
 }

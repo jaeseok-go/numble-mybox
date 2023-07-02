@@ -7,8 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 @RequiredArgsConstructor
 public class AmazonS3StorageHandler implements StorageHandler {
@@ -32,18 +30,12 @@ public class AmazonS3StorageHandler implements StorageHandler {
                 .getObjectContent();
     }
 
-    public int deleteAll(List<FileKey> fileKeys) {
-        List<DeleteObjectsRequest.KeyVersion> keys = new ArrayList<>();
-        for (FileKey fileKey : fileKeys) {
-            keys.add(new DeleteObjectsRequest.KeyVersion(fileKey.getKey()));
-        }
+    @Override
+    public int delete(FileKey fileKey) {
+        DeleteObjectRequest objectDeleteRequest =
+                new DeleteObjectRequest(bucket, fileKey.getKey());
+        amazonS3Client.deleteObject(objectDeleteRequest);
 
-        DeleteObjectsRequest multiObjectDeleteRequest =
-                new DeleteObjectsRequest(bucket)
-                .withKeys(keys)
-                .withQuiet(false);
-
-        DeleteObjectsResult result = amazonS3Client.deleteObjects(multiObjectDeleteRequest);
-        return result.getDeletedObjects().size();
+        return 1;
     }
 }
