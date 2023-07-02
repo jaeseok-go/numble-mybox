@@ -103,8 +103,10 @@ class MemberServiceTest {
             Folder rootFolder = Folder.builder().id(1L).parent(null).build();
 
             BDDMockito.given(memberRepository.findByEmail(email)).willReturn(Optional.of(loginMember));
+            BDDMockito.given(memberRepository.findById(any())).willReturn(Optional.of(loginMember));
             BDDMockito.given(jwtHandler.create(any(Long.class))).willReturn(sampleJwt);
             BDDMockito.given(folderService.retrieveRootFolder(any(Member.class))).willReturn(rootFolder);
+
 
             // when
             LoginResponse response = memberService.login(loginParam);

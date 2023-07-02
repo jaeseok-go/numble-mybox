@@ -5,6 +5,7 @@ import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.file.dto.FileDownloadResponse;
+import jaeseok.numble.mybox.file.dto.FileUploadResponse;
 import jaeseok.numble.mybox.file.repository.FileRepository;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
@@ -27,7 +28,7 @@ public class FileService {
     private final JwtHandler jwtHandler;
 
     @Transactional
-    public Long upload(MultipartFile multipartFile, Long parentId) {
+    public FileUploadResponse upload(MultipartFile multipartFile, Long parentId) {
         Folder parent = folderRepository.findById(parentId)
                         .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
@@ -45,7 +46,7 @@ public class FileService {
             throw new MyBoxException(ResponseCode.FILE_UPLOAD_FAIL);
         }
 
-        return uploadedFile.getId();
+        return new FileUploadResponse(uploadedFile);
     }
 
     public FileDownloadResponse download(Long fileId) {
