@@ -33,7 +33,7 @@ public class FolderService {
         Folder folder = folderRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
 
-        int fileCount = fileService.deleteAll(folder.getAllChildFiles());
+        Long fileCount = fileService.deleteAll(folder.getAllChildFiles());
 
         folderRepository.delete(folder);
 

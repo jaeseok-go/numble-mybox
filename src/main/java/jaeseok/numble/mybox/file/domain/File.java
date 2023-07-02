@@ -2,6 +2,7 @@ package jaeseok.numble.mybox.file.domain;
 
 import jaeseok.numble.mybox.folder.domain.Element;
 import jaeseok.numble.mybox.member.domain.Member;
+import jaeseok.numble.mybox.storage.FileKey;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +27,7 @@ public class File extends Element {
     @JoinColumn(name = "owner_id", nullable = false)
     private Member owner;
 
-    public String getCurrentPath() {
-        return super.getParent().getCurrentPath() + "/" + this.getName();
+    public FileKey getFileKey() {
+        return new FileKey(this.getId());
     }
 }

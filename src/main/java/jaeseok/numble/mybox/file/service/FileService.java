@@ -6,10 +6,8 @@ import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.file.dto.FileDownloadResponse;
 import jaeseok.numble.mybox.file.repository.FileRepository;
-import jaeseok.numble.mybox.folder.domain.Element;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
-import jaeseok.numble.mybox.storage.FileKey;
 import jaeseok.numble.mybox.storage.StorageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -19,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -30,20 +27,20 @@ public class FileService {
     private final JwtHandler jwtHandler;
 
     @Transactional
-    public Long upload(MultipartFile file, Long parentId) {
+    public Long upload(MultipartFile multipartFile, Long parentId) {
         Folder parent = folderRepository.findById(parentId)
                         .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
         parent.validateOwner(jwtHandler.getId());
 
         File uploadedFile = fileRepository.save(File.builder()
-                .name(file.getName())
-                .size(file.getSize())
+                .name(multipartFile.getName())
+                .size(multipartFile.getSize())
                 .owner(parent.getOwner())
                 .build());
 
         try {
-            storageHandler.upload(file, new FileKey(uploadedFile.getCurrentPath()));
+            storageHandler.upload(multipartFile, uploadedFile.getFileKey());
         } catch (IOException e) {
             throw new MyBoxException(ResponseCode.FILE_UPLOAD_FAIL);
         }
@@ -56,20 +53,27 @@ public class FileService {
                 .orElseThrow(()-> new MyBoxException(ResponseCode.FILE_NOT_FOUND));
 
         String fileName = file.getName();
-        InputStreamResource resource = new InputStreamResource(storageHandler.download(new FileKey(file.getCurrentPath())));
+        InputStreamResource resource = new InputStreamResource(storageHandler.download(file.getFileKey()));
 
         return new FileDownloadResponse(fileName, resource);
     }
 
-    public Integer deleteAll(List<File> files) {
-        int deleteCount = storageHandler.deleteAll(files.stream()
-                .map(Element::getId)
-                .map(FileKey::new)
-                .collect(Collectors.toList()));
+    @Transactional
+    public Long delete(Long fileId) {
+        File file = fileRepository.findById(fileId)
+                .orElseThrow(() -> new MyBoxException(ResponseCode.FILE_NOT_FOUND));
 
-        fileRepository.deleteAll(files);
+        fileRepository.delete(file);
 
-        return deleteCount;
+        storageHandler.delete(file.getFileKey());
+
+        return fileId;
+    }
+
+    public Long deleteAll(List<File> files) {
+        return files.stream()
+                .mapToLong(file -> delete(file.getId()))
+                .count();
     }
 
 }
