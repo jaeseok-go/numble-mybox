@@ -48,7 +48,7 @@ public class MemberService {
         String jwt = jwtHandler.create(member.getId());
         Folder rootFolder = folderService.retrieveRootFolder(member);
 
-        return new LoginResponse(jwt, rootFolder.getId());
+        return new LoginResponse(jwt, rootFolder.getId(), retrieveMember());
     }
 
     public MemberInfoResponse retrieveMember() {

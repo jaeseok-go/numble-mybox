@@ -6,6 +6,7 @@ import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.dto.FolderCreateResponse;
+import jaeseok.numble.mybox.folder.dto.FolderDeleteResponse;
 import jaeseok.numble.mybox.folder.dto.FolderRetrieveResponse;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.member.domain.Member;
@@ -29,15 +30,19 @@ public class FolderService {
         return new FolderCreateResponse(child);
     }
 
-    public Boolean delete(Long id) {
+    public FolderDeleteResponse delete(Long id) {
         Folder folder = folderRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
 
         Long fileCount = fileService.deleteAll(folder.getAllChildFiles());
+        Long folderCount = folder.deleteChildFolders();
 
-        folderRepository.delete(folder);
+        if (folderCount == 0) {
+            folderRepository.delete(folder);
+            folderCount++;
+        }
 
-        return true;
+        return new FolderDeleteResponse(fileCount, folderCount);
     }
 
     public FolderRetrieveResponse retrieveFolder(Long id) {
@@ -46,7 +51,6 @@ public class FolderService {
 
         return new FolderRetrieveResponse(folder);
     }
-
 
     public Folder retrieveRootFolder(Member member) {
         return folderRepository

@@ -28,11 +28,11 @@ public class Folder extends Element {
     private Member owner;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Folder> childFolders = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> childFiles = new ArrayList<>();
 
     public Folder addFolder(String name) {
@@ -62,13 +62,6 @@ public class Folder extends Element {
         }
     }
 
-    public String getCurrentPath() {
-        Folder parent = super.getParent();
-        return parent == null ?
-                "/" :
-                parent.getCurrentPath() + "/" + this.getName();
-    }
-
     public List<File> getAllChildFiles() {
         return addAllChildFiles(new ArrayList<>());
     }
@@ -79,7 +72,22 @@ public class Folder extends Element {
         for (Folder folder : childFolders) {
             folder.addAllChildFiles(files);
         }
-
         return files;
+    }
+
+    /**
+     * orphanRemoval option을 이용해 하위 폴더들을 삭제
+     *  만약 해당 폴더 하위에 파일이나 폴더가 있는 경우에는 삭제하지 않는다.
+     */
+    public Long deleteChildFolders() {
+        Long count = 0L;
+        for (Folder childFolder : childFolders) {
+            if (childFolder.childFiles.size() == 0
+                    && childFolder.deleteChildFolders() == 0) {
+                childFolders.remove(childFolder);
+                count++;
+            }
+        }
+        return count;
     }
 }

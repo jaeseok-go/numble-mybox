@@ -32,7 +32,10 @@
   {
       "success": true,
       "errorCode": "00000000",
-      "content": "test_id"
+      "content": {
+                    "id": 1,
+                    "email": "abc@def.ghi"
+                 }
    }
   ```
   ```
@@ -64,7 +67,18 @@
       "success": true,
       "errorCode": "00000000",
       "content": {
-                    "jwt": "strings"
+                    "jwt": "strings",
+                    "rootFolderId": 2,
+                    "memberInfo": {
+                                    "id": 1,
+                                    "email": "abc@def.ghi",
+                                    "usage": {
+                                                "B": "14873015",
+                                                "KB": "14524.428710",
+                                                "MB": "14.184012",
+                                                "GB": "0.013851"
+                                              }
+                                  }
                   }
       
    }
@@ -136,7 +150,12 @@
   {
     "success": true,
     "errorCode": "00000000",
-    "content": 5
+    "content": {
+                  "id": 1,
+                  "name": "directory",
+                  "createAt": "2021-08-01T16:26:39.098",
+                  "modifiedAt": "2021-08-01T16:26:39.098"
+               }
   }
   ```
   ```
@@ -165,7 +184,10 @@
   {
     "success": true,
     "errorCode": "00000000",
-    "content": 10
+    "content": {
+                  "fileCount": 10,
+                  "folderCount": 4
+               }
   }
   ```
   ```
@@ -240,6 +262,7 @@
 - request
    ```
   {
+    "multipartFile": file
   }
   ```
 - response
@@ -247,7 +270,18 @@
   {
     "success": true,
     "errorCode": "00000000",
-    "content": 15
+    "content": {
+                  "id": 1,
+                  "name": "abc.jpg",
+                  "createdAt": "2022-01-20 11:20:00",
+                  "modifiedAt": "2022-01-20 11:20:00",
+                  "size": {
+                              "B": "14873015",
+                              "KB": "14524.428710",
+                              "MB": "14.184012",
+                              "GB": "0.013851"
+                          }
+               }
   }
   ```
   ```
@@ -276,7 +310,7 @@
   {
     "success": true,
     "errorCode": "00000000",
-    "content": 15
+    "content": input_stream
   }
   ```
   ```

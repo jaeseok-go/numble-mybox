@@ -10,4 +10,5 @@ import lombok.*;
 public class LoginResponse {
     private String jwt;
     private Long rootFolderId;
+    private MemberInfoResponse memberInfo;
 }
