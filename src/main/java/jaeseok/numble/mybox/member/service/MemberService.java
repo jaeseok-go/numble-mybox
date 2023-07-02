@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 @Service
 public class MemberService {
@@ -23,20 +21,33 @@ public class MemberService {
 
     @Transactional
     public SignUpResponse signUp(SignUpParam signUpParam) {
-        Optional<Member> memberOptional = memberRepository.findByEmail(signUpParam.getEmail());
+        String email = signUpParam.getEmail();
 
-        if (memberOptional.isPresent()) {
+        checkDuplicate(email);
+
+        Member joinMember = Member.builder()
+                .email(email)
+                .password(signUpParam.getPassword())
+                .build();
+
+        joinMember.createRootFolder();
+
+        memberRepository.save(joinMember);
+
+        return SignUpResponse.builder()
+                .id(joinMember.getId())
+                .email(email)
+                .build();
+    }
+
+    private void checkDuplicate(String email) {
+        if (exist(email)) {
             throw new MyBoxException(ResponseCode.MEMBER_EXIST);
         }
+    }
 
-        Member member = memberRepository.save(Member.builder()
-                .email(signUpParam.getEmail())
-                .password(signUpParam.getPassword())
-                .build());
-
-        member.createRootFolder();
-
-        return new SignUpResponse(member.getId(), member.getEmail());
+    private boolean exist(String email) {
+        return memberRepository.findByEmail(email).isPresent();
     }
 
     public LoginResponse login(LoginParam loginParam) {

@@ -15,6 +15,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jaeseok.numble.mybox.common.constant.MyBoxConstant.ROOT_FOLDER_NAME;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -47,7 +49,7 @@ public class Member extends BaseEntity {
 
     public void createRootFolder() {
         folders.add(Folder.builder()
-                .name("")
+                .name(ROOT_FOLDER_NAME)
                 .owner(this)
                 .build());
     }
