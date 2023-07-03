@@ -12,6 +12,8 @@ import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -39,6 +41,7 @@ public class FolderService {
         }
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public FolderDeleteResponse delete(Long id) {
         Folder folder = folderRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
@@ -46,7 +49,7 @@ public class FolderService {
         Long fileCount = fileService.deleteAll(folder.getAllChildFiles());
         Long folderCount = folder.deleteChildFolders();
 
-        if (folderCount == 0) {
+        if (folder.countChild() == 0) {
             folderRepository.delete(folder);
             folderCount++;
         }

@@ -93,7 +93,7 @@ public class Folder extends Element {
         return count;
     }
 
-    private Long countChild() {
+    public Long countChild() {
         return this.childFiles.size()
                 + this.childFolders.size()
                 + this.childFolders.stream().mapToLong(Folder::countChild).sum();
