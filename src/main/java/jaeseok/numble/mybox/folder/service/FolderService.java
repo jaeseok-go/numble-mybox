@@ -25,9 +25,18 @@ public class FolderService {
         Folder parent = folderRepository.findById(folderCreateParam.getParentId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
-        Folder child = parent.addFolder(folderCreateParam.getFolderName());
+        String folderName = folderCreateParam.getFolderName();
 
+        validateFolderName(parent, folderName);
+
+        Folder child = parent.createFolder(folderName);
         return new FolderCreateResponse(child);
+    }
+
+    private void validateFolderName(Folder parent, String folderName) {
+        if (parent.hasFolderName(folderName)) {
+            throw new MyBoxException(ResponseCode.FOLDER_NAME_EXIST);
+        }
     }
 
     public FolderDeleteResponse delete(Long id) {

@@ -12,6 +12,7 @@ public enum ResponseCode {
     FILE_UPLOAD_FAIL("FILE0001", "Fail to upload file."),
     FILE_DELETE_FAIL("FILE0002", "Fail to delete file under []."),
     FILE_NOT_FOUND("FILE0003", "File is not found."),
+    FILE_NAME_EXIST("FILE0004", "The file name is already exist."),
     PARENT_NOT_FOUND("FLDR0001", "Parent folder is not found."),
     FOLDER_NOT_FOUND("FLDR0002", "Folder is not found."),
     FOLDER_DELETE_FAIL("FLDR0003", "Fail to delete [] folder."),
