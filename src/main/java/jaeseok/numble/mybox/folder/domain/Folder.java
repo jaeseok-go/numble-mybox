@@ -1,7 +1,5 @@
 package jaeseok.numble.mybox.folder.domain;
 
-import jaeseok.numble.mybox.common.response.ResponseCode;
-import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.member.domain.Member;
 import lombok.AllArgsConstructor;
@@ -35,9 +33,7 @@ public class Folder extends Element {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<File> childFiles = new ArrayList<>();
 
-    public Folder addFolder(String name) {
-        validateFolderName(name);
-
+    public Folder createFolder(String name) {
         Folder child = Folder.builder()
                 .name(name)
                 .parent(this)
@@ -45,21 +41,26 @@ public class Folder extends Element {
                 .build();
 
         childFolders.add(child);
+
         return child;
     }
 
-    public void validateFolderName(String name) {
-        for (Folder folder : childFolders) {
-            if (name.equals(folder.getName())) {
-                throw new MyBoxException(ResponseCode.FOLDER_NAME_EXIST);
-            }
-        }
+    public boolean hasFolderName(String folderName) {
+        return childFolders.stream()
+                .filter(f -> folderName.equals(f.getName()))
+                .findAny()
+                .isPresent();
     }
 
-    public void validateOwner(Long memberId) {
-        if (!memberId.equals(getOwner().getId())) {
-            throw new MyBoxException(ResponseCode.INVALID_TOKEN);
-        }
+    public boolean hasFileName(String fileName) {
+        return childFiles.stream()
+                .filter(f -> fileName.equals(f.getName()))
+                .findAny()
+                .isPresent();
+    }
+
+    public boolean isOwner(Long memberId) {
+        return memberId.equals(this.owner.getId());
     }
 
     public List<File> getAllChildFiles() {
@@ -82,12 +83,19 @@ public class Folder extends Element {
     public Long deleteChildFolders() {
         Long count = 0L;
         for (Folder childFolder : childFolders) {
-            if (childFolder.childFiles.size() == 0
-                    && childFolder.deleteChildFolders() == 0) {
+            count += childFolder.deleteChildFolders();
+
+            if (childFolder.countChild() == 0) {
                 childFolders.remove(childFolder);
                 count++;
             }
         }
         return count;
+    }
+
+    public Long countChild() {
+        return this.childFiles.size()
+                + this.childFolders.size()
+                + this.childFolders.stream().mapToLong(Folder::countChild).sum();
     }
 }

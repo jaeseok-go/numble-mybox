@@ -12,6 +12,8 @@ import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -25,11 +27,21 @@ public class FolderService {
         Folder parent = folderRepository.findById(folderCreateParam.getParentId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
-        Folder child = parent.addFolder(folderCreateParam.getFolderName());
+        String folderName = folderCreateParam.getFolderName();
 
+        validateFolderName(parent, folderName);
+
+        Folder child = parent.createFolder(folderName);
         return new FolderCreateResponse(child);
     }
 
+    private void validateFolderName(Folder parent, String folderName) {
+        if (parent.hasFolderName(folderName)) {
+            throw new MyBoxException(ResponseCode.FOLDER_NAME_EXIST);
+        }
+    }
+
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public FolderDeleteResponse delete(Long id) {
         Folder folder = folderRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
@@ -37,7 +49,7 @@ public class FolderService {
         Long fileCount = fileService.deleteAll(folder.getAllChildFiles());
         Long folderCount = folder.deleteChildFolders();
 
-        if (folderCount == 0) {
+        if (folder.countChild() == 0) {
             folderRepository.delete(folder);
             folderCount++;
         }

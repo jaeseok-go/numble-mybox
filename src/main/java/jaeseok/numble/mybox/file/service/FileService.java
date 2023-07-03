@@ -32,10 +32,12 @@ public class FileService {
         Folder parent = folderRepository.findById(parentId)
                         .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
-        parent.validateOwner(jwtHandler.getId());
+        String fileName = multipartFile.getName();
+
+        validateFileUpload(parent, fileName);
 
         File uploadedFile = fileRepository.save(File.builder()
-                .name(multipartFile.getName())
+                .name(fileName)
                 .size(multipartFile.getSize())
                 .owner(parent.getOwner())
                 .build());
@@ -47,6 +49,16 @@ public class FileService {
         }
 
         return new FileUploadResponse(uploadedFile);
+    }
+
+    private void validateFileUpload(Folder parent, String fileName) {
+        if (parent.isOwner(jwtHandler.getId())) {
+            throw new MyBoxException(ResponseCode.INVALID_TOKEN);
+        }
+
+        if (parent.hasFileName(fileName)) {
+            throw new MyBoxException(ResponseCode.FILE_NAME_EXIST);
+        }
     }
 
     public FileDownloadResponse download(Long fileId) {
