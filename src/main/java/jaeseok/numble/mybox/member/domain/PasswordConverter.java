@@ -20,7 +20,7 @@ public class PasswordConverter implements AttributeConverter<String, String> {
 
     private String encode(String password) {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA256");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(password.getBytes());
             return String.format("%0128x", new BigInteger(1, md.digest()));
         } catch (NoSuchAlgorithmException e) {
