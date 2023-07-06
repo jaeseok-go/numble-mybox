@@ -1,14 +1,12 @@
 package jaeseok.numble.mybox.common.response;
 
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@NoArgsConstructor
-@Setter
 @Builder
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class MyBoxResponse {
     private static final String SUCCESS_CODE = ResponseCode.SUCCESS.getCode();
