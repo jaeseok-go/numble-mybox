@@ -1,6 +1,7 @@
 package jaeseok.numble.mybox.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.member.dto.SignUpParam;
 import jaeseok.numble.mybox.storage.StorageHandler;
 import org.junit.jupiter.api.DisplayName;
@@ -56,8 +57,36 @@ class MemberControllerTest {
             // then
             resultActions
                     .andExpect(status().isOk())
+                    .andExpect(jsonPath("success").value(true))
+                    .andExpect(jsonPath("errorCode").value(ResponseCode.SUCCESS.getCode()))
                     .andExpect(jsonPath("content.id").isNumber())
                     .andExpect(jsonPath("content.email").value(email));
+        }
+
+        @Test
+        @DisplayName("중복된 이메일로 회원가입하는 경우 실패")
+        void failToDuplicatedEmail() throws Exception {
+            // given
+            SignUpParam signUpParam = new SignUpParam(email, password);
+
+            mockMvc.perform(post("/api/v1/member")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(signUpParam))
+                    .accept(MediaType.APPLICATION_JSON));
+
+            // when
+            ResultActions resultActions = mockMvc.perform(post("/api/v1/member")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(signUpParam))
+                            .accept(MediaType.APPLICATION_JSON))
+                    .andDo(print());
+
+            // then
+            resultActions
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("success").value(false))
+                    .andExpect(jsonPath("errorCode").value(ResponseCode.MEMBER_EXIST.getCode()))
+                    .andExpect(jsonPath("content").value(ResponseCode.MEMBER_EXIST.getMessage()));
         }
     }
 }
