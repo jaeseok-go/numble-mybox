@@ -45,11 +45,15 @@ public class Member extends BaseEntity {
         return object instanceof Member && this.id.equals(((Member) object).id);
     }
 
-    public void createRootFolder() {
-        folders.add(Folder.builder()
+    public Folder createRootFolder() {
+        Folder rootFolder = Folder.builder()
                 .name(ROOT_FOLDER_NAME)
                 .owner(this)
-                .build());
+                .build();
+
+        folders.add(rootFolder);
+
+        return rootFolder;
     }
 
     public boolean equalPassword(String password) {

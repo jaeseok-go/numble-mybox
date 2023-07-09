@@ -3,8 +3,8 @@ package jaeseok.numble.mybox.member.service;
 import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
-import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
+import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.*;
@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static jaeseok.numble.mybox.common.constant.MyBoxConstant.ROOT_FOLDER_NAME;
 import static org.mockito.ArgumentMatchers.any;
 
 @DisplayName("MemberServiceTest")
@@ -32,6 +33,9 @@ class MemberServiceTest {
 
     @MockBean
     private MemberRepository memberRepository;
+
+    @MockBean
+    private FolderRepository folderRepository;
 
     @MockBean
     private JwtHandler jwtHandler;
@@ -53,12 +57,18 @@ class MemberServiceTest {
                 .password(password)
                 .build();
 
+        private Folder rootFolder = Folder.builder()
+                .name(ROOT_FOLDER_NAME)
+                .owner(Member.builder().build())
+                .build();
+
         @Test
         @DisplayName("성공")
         void success() {
             // given
             BDDMockito.given(memberRepository.findByEmail(email)).willReturn(Optional.empty());
             BDDMockito.given(memberRepository.save(any())).willReturn(signUpMember);
+            BDDMockito.given(folderRepository.save(any())).willReturn(rootFolder);
 
             // when
             SignUpResponse response = memberService.signUp(signUpParam);

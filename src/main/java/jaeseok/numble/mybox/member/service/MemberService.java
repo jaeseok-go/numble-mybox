@@ -4,6 +4,7 @@ import jaeseok.numble.mybox.common.auth.JwtHandler;
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import jaeseok.numble.mybox.folder.domain.Folder;
+import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.folder.service.FolderService;
 import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.*;
@@ -18,6 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final JwtHandler jwtHandler;
     private final FolderService folderService;
+    private final FolderRepository folderRepository;
 
     @Transactional
     public SignUpResponse signUp(SignUpParam signUpParam) {
@@ -30,9 +32,10 @@ public class MemberService {
                 .password(signUpParam.getPassword())
                 .build();
 
-        joinMember.createRootFolder();
+        Folder rootFolder = joinMember.createRootFolder();
 
         memberRepository.save(joinMember);
+        folderRepository.save(rootFolder);
 
         return SignUpResponse.builder()
                 .id(joinMember.getId())
