@@ -66,7 +66,7 @@ public class FolderService {
 
     public Folder retrieveRootFolder(Member member) {
         return folderRepository
-                .findFolderByOwnerAndParent(member.getId(), null)
+                .findFolderByOwnerIdAndParentIsNull(member.getId())
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
     }
 }

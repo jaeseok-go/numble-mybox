@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 import static jaeseok.numble.mybox.member.domain.QMember.member;
+import static jaeseok.numble.mybox.file.domain.QFile.file;
 
 @RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepositoryCustom{
@@ -20,11 +21,9 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom{
                 .select(Projections.bean(MemberInfoAndUsage.class,
                         member.id,
                         member.email,
-                        member.files.size().sum().longValue().as("byteUsage")))
-                .from(member)
-                .leftJoin(member.files).fetchJoin()
-                .where(member.eq(member.files.any().owner)
-                        .and(member.id.eq(id)))
+                        file.size.sum().longValue().coalesce(0L).as("byteUsage")))
+                .from(member).leftJoin(member.files, file)
+                .where(member.id.eq(id))
                 .groupBy(member.id, member.email)
                 .fetch().get(0));
     }
