@@ -219,6 +219,26 @@ class MemberControllerTest {
                         .andExpect(jsonPath("content.usage.mb").isNumber())
                         .andExpect(jsonPath("content.usage.gb").isNumber());
             }
+
+            @Test
+            @DisplayName("헤더에 유효한 토큰이 없는 경우 실패")
+            void failToInvalidToken() throws Exception {
+                // given
+
+
+                // when
+                ResultActions resultActions = mockMvc.perform(get("/api/v1/member")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andDo(print());
+
+                // then
+                resultActions
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("success").value(false))
+                        .andExpect(jsonPath("errorCode").value(ResponseCode.INVALID_TOKEN.getCode()))
+                        .andExpect(jsonPath("content").value(ResponseCode.INVALID_TOKEN.getMessage()));
+            }
         }
     }
 }
