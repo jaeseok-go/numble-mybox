@@ -135,6 +135,27 @@ class MemberControllerTest {
                         .andExpect(jsonPath("content.memberInfo.usage.mb").isNumber())
                         .andExpect(jsonPath("content.memberInfo.usage.gb").isNumber());
             }
+
+            @Test
+            @DisplayName("패스워드 틀린경우 실패")
+            void failToFaultPassword() throws Exception {
+                // given
+                LoginParam loginParam = new LoginParam(email, "fault_password");
+
+                // when
+                ResultActions resultActions = mockMvc.perform(post("/api/v1/login")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(loginParam))
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andDo(print());
+
+                // then
+                resultActions
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("success").value(false))
+                        .andExpect(jsonPath("errorCode").value(ResponseCode.INVALID_PASSWORD.getCode()))
+                        .andExpect(jsonPath("content").value(ResponseCode.INVALID_PASSWORD.getMessage()));
+            }
         }
     }
 }
