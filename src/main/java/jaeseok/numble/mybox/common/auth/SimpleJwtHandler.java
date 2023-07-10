@@ -2,6 +2,8 @@ package jaeseok.numble.mybox.common.auth;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jaeseok.numble.mybox.common.response.ResponseCode;
+import jaeseok.numble.mybox.common.response.exception.MyBoxException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,6 +42,10 @@ public class SimpleJwtHandler implements JwtHandler{
 
     @Override
     public Long getId(String jwt) {
+        if (jwt == null || jwt.isBlank()) {
+            throw new MyBoxException(ResponseCode.INVALID_TOKEN);
+        }
+
         String idString = Jwts.parserBuilder()
                 .setSigningKey(Base64.getEncoder().encodeToString(issueKey.getBytes()))
                 .build()
