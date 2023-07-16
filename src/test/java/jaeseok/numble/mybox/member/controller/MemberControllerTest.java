@@ -7,18 +7,16 @@ import jaeseok.numble.mybox.member.dto.LoginParam;
 import jaeseok.numble.mybox.member.dto.LoginResponse;
 import jaeseok.numble.mybox.member.dto.SignUpParam;
 import jaeseok.numble.mybox.storage.StorageHandler;
+import jaeseok.numble.mybox.util.annotation.IntegrationTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,9 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@IntegrationTest
 class MemberControllerTest {
 
     @MockBean
