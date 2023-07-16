@@ -17,8 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
     private final FileService fileService;
 
-    @PostMapping("/v1/{parentId}/file")
-    public ResponseEntity upload(@RequestParam("file") MultipartFile file, @PathVariable Long parentId) {
+    @PostMapping(value = "/v1/{parentId}/file")
+    public ResponseEntity upload(@RequestParam(required = false)  MultipartFile file, @PathVariable Long parentId) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(fileService.upload(file, parentId));
         return ResponseEntity.ok(myBoxResponse);
     }

@@ -32,7 +32,7 @@ public class FileService {
         Folder parent = folderRepository.findById(parentId)
                         .orElseThrow(() -> new MyBoxException(ResponseCode.PARENT_NOT_FOUND));
 
-        String fileName = multipartFile.getName();
+        String fileName = multipartFile.getOriginalFilename();
 
         validateFileUpload(parent, fileName);
 
@@ -52,7 +52,7 @@ public class FileService {
     }
 
     private void validateFileUpload(Folder parent, String fileName) {
-        if (parent.isOwner(jwtHandler.getId())) {
+        if (!parent.isOwner(jwtHandler.getId())) {
             throw new MyBoxException(ResponseCode.INVALID_TOKEN);
         }
 
