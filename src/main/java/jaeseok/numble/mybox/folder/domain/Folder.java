@@ -45,6 +45,10 @@ public class Folder extends Element {
         return child;
     }
 
+    public void addChildFile(File file) {
+        this.childFiles.add(file);
+    }
+
     public boolean hasFolderName(String folderName) {
         return childFolders.stream()
                 .filter(f -> folderName.equals(f.getName()))
