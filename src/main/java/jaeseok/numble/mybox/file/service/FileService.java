@@ -36,11 +36,15 @@ public class FileService {
 
         validateFileUpload(parent, fileName);
 
-        File uploadedFile = fileRepository.save(File.builder()
+        File uploadedFile = File.builder()
                 .name(fileName)
                 .size(multipartFile.getSize())
                 .owner(parent.getOwner())
-                .build());
+                .build();
+
+        parent.addChildFile(uploadedFile);
+
+        fileRepository.save(uploadedFile);
 
         try {
             storageHandler.upload(multipartFile, uploadedFile.getFileKey());

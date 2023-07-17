@@ -12,18 +12,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.charset.StandardCharsets;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,7 +44,6 @@ class FileControllerTest {
         private String email = "test@test.test";
         private String password = "test_password";
         private String jwt;
-
         private Long rootFolderId;
 
         @BeforeEach
@@ -115,6 +108,72 @@ class FileControllerTest {
                     .andExpect(jsonPath("content.size.kb").isNumber())
                     .andExpect(jsonPath("content.size.mb").isNumber())
                     .andExpect(jsonPath("content.size.gb").isNumber());
+        }
+
+        @Test
+        @DisplayName("폴더의 정보가 유효하지 않는 경우 실패")
+        void failToFaultFolder() throws Exception {
+            // given
+            String fileName = "test_image";
+            String originalFileName = fileName + ".png";
+            Resource resource = resourceLoader.getResource("classpath:/img/"+originalFileName);
+
+            MockMultipartFile multipartFile =
+                    new MockMultipartFile(
+                            "file",
+                            originalFileName,
+                            MediaType.MULTIPART_FORM_DATA_VALUE,
+                            resource.getInputStream());
+
+            Long faultFolderId = Long.MAX_VALUE;
+
+            // when
+            ResultActions resultActions = mockMvc.perform(multipart("/api/v1/" + faultFolderId + "/file")
+                            .file(multipartFile)
+                            .header("Authorization", jwt))
+                    .andDo(print());
+
+            // then
+            resultActions
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("success").value(false))
+                    .andExpect(jsonPath("errorCode").value(ResponseCode.PARENT_NOT_FOUND.getCode()))
+                    .andExpect(jsonPath("content").value(ResponseCode.PARENT_NOT_FOUND.getMessage()));
+        }
+
+        @Test
+        @DisplayName("업로드 파일과 동일한 이름이 이미 폴더에 존재하는 경우 실패")
+        void failToOverlappedFileName() throws Exception {
+            // given
+            String fileName = "test_image";
+            String originalFileName = fileName + ".png";
+            Resource resource = resourceLoader.getResource("classpath:/img/"+originalFileName);
+
+            MockMultipartFile multipartFile =
+                    new MockMultipartFile(
+                            "file",
+                            originalFileName,
+                            MediaType.MULTIPART_FORM_DATA_VALUE,
+                            resource.getInputStream());
+
+            mockMvc.perform(multipart("/api/v1/" + rootFolderId + "/file")
+                            .file(multipartFile)
+                            .header("Authorization", jwt))
+                    .andDo(print());
+
+
+            // when
+            ResultActions resultActions = mockMvc.perform(multipart("/api/v1/" + rootFolderId + "/file")
+                            .file(multipartFile)
+                            .header("Authorization", jwt))
+                    .andDo(print());
+
+            // then
+            resultActions
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("success").value(false))
+                    .andExpect(jsonPath("errorCode").value(ResponseCode.FILE_NAME_EXIST.getCode()))
+                    .andExpect(jsonPath("content").value(ResponseCode.FILE_NAME_EXIST.getMessage()));
         }
     }
 }
