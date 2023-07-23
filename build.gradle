@@ -35,6 +35,8 @@ dependencies {
     implementation 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
     implementation group: 'com.querydsl', name: 'querydsl-jpa', version: '5.0.0'
     implementation group: 'com.querydsl', name: 'querydsl-apt', version: '5.0.0'
+    implementation group: 'org.springframework.data', name: 'spring-data-redis', version: '2.7.14'
+    implementation group: 'io.lettuce', name: 'lettuce-core', version: '6.1.10.RELEASE'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"

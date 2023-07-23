@@ -17,6 +17,10 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        redis-version: [ 4, 5 ]
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -24,7 +28,14 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
- 
+
+      # Redis 실행
+      - name: Start Redis
+        uses: supercharge/redis-github-action@1.5.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
+          redis-port: 6379
+
       # Gradle wrapper 파일 실행 권한주기
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
