@@ -18,7 +18,6 @@ import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import java.util.Optional;
 
 import static jaeseok.numble.mybox.common.constant.MyBoxConstant.ROOT_FOLDER_NAME;
