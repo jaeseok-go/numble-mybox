@@ -21,8 +21,7 @@ public class AuthorizedTestInitializer implements TestInitializer{
         mockMvc.perform(post("/api/v1/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpParam))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                        .accept(MediaType.APPLICATION_JSON));
     }
 
     @Override
@@ -31,8 +30,7 @@ public class AuthorizedTestInitializer implements TestInitializer{
         ResultActions resultActions = mockMvc.perform(post("/api/v1/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginParam))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print());
+                        .accept(MediaType.APPLICATION_JSON));
 
         String content = resultActions.andReturn().getResponse().getContentAsString();
         MyBoxResponse myBoxResponse = objectMapper.readValue(content, MyBoxResponse.class);
