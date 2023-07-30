@@ -53,7 +53,10 @@ class FolderServiceTest {
         @Test
         void success() {
             // given
-            BDDMockito.when(folderRepository.findById(any(Long.class))).thenReturn(Optional.of(parent));
+            BDDMockito.when(folderRepository.findById(any(Long.class)))
+                    .thenReturn(Optional.of(parent));
+            BDDMockito.when(folderRepository.save(any()))
+                    .thenReturn(Folder.builder().name(folderName).build());
 
             // when
             FolderCreateResponse folderCreateResponse = folderService.create(folderCreateParam);

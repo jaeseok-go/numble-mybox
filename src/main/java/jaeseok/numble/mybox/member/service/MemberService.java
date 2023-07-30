@@ -10,6 +10,7 @@ import jaeseok.numble.mybox.member.domain.Member;
 import jaeseok.numble.mybox.member.dto.*;
 import jaeseok.numble.mybox.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,7 +72,7 @@ public class MemberService {
         }
     }
 
-
+    @Cacheable(value = "member", keyGenerator = "authorizedRequestKeyGenerator")
     public MemberInfoResponse retrieveMember() {
         return retrieveMember(jwtHandler.getId());
     }

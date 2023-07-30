@@ -32,7 +32,9 @@ public class FolderService {
         validateFolderName(parent, folderName);
 
         Folder child = parent.createFolder(folderName);
-        return new FolderCreateResponse(child);
+        Folder createdChild = folderRepository.save(child);
+
+        return new FolderCreateResponse(createdChild);
     }
 
     private void validateFolderName(Folder parent, String folderName) {
