@@ -67,39 +67,27 @@ public class Folder extends Element {
         return memberId.equals(this.owner.getId());
     }
 
-    public List<File> getAllChildFiles() {
-        return addAllChildFiles(new ArrayList<>());
+    public boolean isRemain() {
+        return this.childFiles.size() + this.childFolders.size() > 0;
     }
 
-    public List<File> addAllChildFiles(List<File> files) {
-        files.addAll(childFiles);
-
-        for (Folder folder : childFolders) {
-            folder.addAllChildFiles(files);
-        }
-        return files;
+    public void removeChildFile(File file) {
+        this.childFiles.remove(file);
+        file.removeParent();
     }
 
-    /**
-     * orphanRemoval option을 이용해 하위 폴더들을 삭제
-     *  만약 해당 폴더 하위에 파일이나 폴더가 있는 경우에는 삭제하지 않는다.
-     */
-    public Long deleteChildFolders() {
-        Long count = 0L;
-        for (Folder childFolder : childFolders) {
-            count += childFolder.deleteChildFolders();
-
-            if (childFolder.countChild() == 0) {
-                childFolders.remove(childFolder);
-                count++;
-            }
-        }
-        return count;
+    public void removeChildFolder(Folder folder) {
+        this.childFolders.remove(folder);
+        folder.removeParent();
     }
 
-    public Long countChild() {
+    public void addChildFolder(Folder folder) {
+        this.childFolders.add(folder);
+        folder.setParent(this);
+    }
+
+    public Integer countChild() {
         return this.childFiles.size()
-                + this.childFolders.size()
-                + this.childFolders.stream().mapToLong(Folder::countChild).sum();
+                + this.childFolders.size();
     }
 }

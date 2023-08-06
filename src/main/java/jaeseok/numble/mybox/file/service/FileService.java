@@ -80,11 +80,14 @@ public class FileService {
         File file = fileRepository.findById(fileId)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FILE_NOT_FOUND));
 
-        fileRepository.delete(file);
+        try {
+            fileRepository.delete(file);
+            storageHandler.delete(file.getFileKey());
+        } catch (Exception e) {
+            return 0L;
+        }
 
-        storageHandler.delete(file.getFileKey());
-
-        return fileId;
+        return 1L;
     }
 
     public Long deleteAll(List<File> files) {
