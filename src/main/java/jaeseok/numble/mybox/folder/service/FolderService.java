@@ -2,11 +2,11 @@ package jaeseok.numble.mybox.folder.service;
 
 import jaeseok.numble.mybox.common.response.ResponseCode;
 import jaeseok.numble.mybox.common.response.exception.MyBoxException;
+import jaeseok.numble.mybox.file.domain.File;
 import jaeseok.numble.mybox.file.service.FileService;
 import jaeseok.numble.mybox.folder.domain.Folder;
 import jaeseok.numble.mybox.folder.dto.FolderCreateParam;
 import jaeseok.numble.mybox.folder.dto.FolderCreateResponse;
-import jaeseok.numble.mybox.folder.dto.FolderDeleteResponse;
 import jaeseok.numble.mybox.folder.dto.FolderRetrieveResponse;
 import jaeseok.numble.mybox.folder.repository.FolderRepository;
 import jaeseok.numble.mybox.member.domain.Member;
@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -44,19 +46,41 @@ public class FolderService {
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    public FolderDeleteResponse delete(Long id) {
+    public Integer delete(Long id) {
         Folder folder = folderRepository.findById(id)
                 .orElseThrow(() -> new MyBoxException(ResponseCode.FOLDER_NOT_FOUND));
 
-        Long fileCount = fileService.deleteAll(folder.getAllChildFiles());
-        Long folderCount = folder.deleteChildFolders();
+        int count = 0;
 
-        if (folder.countChild() == 0) {
-            folderRepository.delete(folder);
-            folderCount++;
+        // ConcurrentModificationException를 방지하기 위해 인덱스 역순으로 처리
+        List<File> files = folder.getChildFiles();
+        for (int i = files.size()-1; i >= 0; i--) {
+            File childFile = files.get(i);
+
+            boolean isDeleted = fileService.delete(childFile.getId()) > 0;
+            if (isDeleted) {
+                folder.removeChildFile(childFile);
+                count++;
+            }
         }
 
-        return new FolderDeleteResponse(fileCount, folderCount);
+        // ConcurrentModificationException를 방지하기 위해 인덱스 역순으로 처리
+        List<Folder> folders = folder.getChildFolders();
+        for (int i = folders.size()-1; i >= 0; i--) {
+            Folder childFolder = folders.get(i);
+
+            count += delete(childFolder.getId());
+            if (!childFolder.isRemain()) {
+                folder.removeChildFolder(childFolder);
+            }
+        }
+
+        if (!folder.isRemain()) {
+            folderRepository.deleteById(id);
+            count++;
+        }
+
+        return count;
     }
 
     public FolderRetrieveResponse retrieveFolder(Long id) {

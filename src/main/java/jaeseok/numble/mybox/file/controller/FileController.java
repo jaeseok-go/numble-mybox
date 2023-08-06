@@ -23,7 +23,7 @@ public class FileController {
         return ResponseEntity.ok(myBoxResponse);
     }
 
-    @GetMapping("/v1/{fileId}")
+    @GetMapping("/v1/file/{fileId}")
     public ResponseEntity download(@PathVariable Long fileId) {
         FileDownloadResponse fileDownloadResponse = fileService.download(fileId);
         return ResponseEntity.ok()
@@ -33,7 +33,7 @@ public class FileController {
                 .body(fileDownloadResponse.getResource());
     }
 
-    @DeleteMapping("/v1/{fileId}")
+    @DeleteMapping("/v1/file/{fileId}")
     public ResponseEntity delete(@PathVariable Long fileId) {
         MyBoxResponse myBoxResponse = new MyBoxResponse(fileService.delete(fileId));
         return ResponseEntity.ok(myBoxResponse);

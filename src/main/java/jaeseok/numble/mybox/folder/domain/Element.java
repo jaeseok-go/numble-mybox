@@ -26,4 +26,12 @@ public class Element extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", nullable = true)
     private Folder parent;
+
+    protected void removeParent() {
+        this.parent = null;
+    }
+
+    protected void setParent(Folder folder) {
+        this.parent = folder;
+    }
 }

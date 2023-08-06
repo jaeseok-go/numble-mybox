@@ -10,6 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FolderDeleteResponse {
-    private Long fileCount;
-    private Long folderCount;
+    private Integer count;
 }
